@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bundler/compact_index.svg)](https://travis-ci.org/bundler/compact_index)
+
 # CompactIndex
 
 Backend for bundler compact index. Used by rubygems.org and bundler-api
