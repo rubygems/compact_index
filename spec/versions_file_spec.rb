@@ -62,7 +62,10 @@ describe CompactIndex::VersionsFile do
       before { allow_any_instance_of(File).to receive(:mtime).and_return(file_creation_time) }
 
       it "return the same content from versions.list file" do
-        expect(versions_file.with_new_gems).to eq(versions_file.send(:content))
+        file = Tempfile.new('versions.list')
+        with_versions_file file.path do
+          expect(versions_file.with_new_gems).to eq(versions_file.send(:content))
+        end
       end
     end
 
@@ -78,7 +81,10 @@ describe CompactIndex::VersionsFile do
       end
 
       it "return the content from versions.list with new gems on bottom" do
-        expect(versions_file.with_new_gems).to eq(file_contents + "\nb 0.2.0\nb 0.2.0-rbx\nc 1.0.0")
+        file = Tempfile.new('versions.list')
+        with_versions_file file.path do
+          expect(versions_file.with_new_gems).to eq(file_contents + "\nb 0.2.0\nb 0.2.0-rbx\nc 1.0.0")
+        end
       end
 
       context "from different dates" do
@@ -93,7 +99,10 @@ describe CompactIndex::VersionsFile do
         it "return the content from versions.list with new gems on bottom" do
           first_changes = "\nb 0.2.0\nb 0.2.0-rbx\nc 1.0.0"
           second_changes = "\nb 0.2.2\nb 0.2.2-rbx\nc 1.0.1"
-          expect(versions_file.with_new_gems).to eq(file_contents + first_changes + second_changes )
+          file = Tempfile.new('versions.list')
+          with_versions_file file.path do
+            expect(versions_file.with_new_gems).to eq(file_contents + first_changes + second_changes )
+          end
         end
       end
     end
