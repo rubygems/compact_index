@@ -1,5 +1,4 @@
 require 'sequel'
-require 'sqlite3'
 
 RSpec.configure do |config|
   config.before(:suite) do
