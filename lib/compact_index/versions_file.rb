@@ -18,6 +18,7 @@ class CompactIndex::VersionsFile
     content = "created_at: #{Time.now.iso8601}"
     content += "\n---\n"
     content += gems_for_new_file
+    content += "\n"
 
     File.open(PATH, 'w') do |io|
       io.write content
@@ -35,7 +36,7 @@ class CompactIndex::VersionsFile
     if new_gems.empty?
       content
     else
-      content + "\n" + new_gems
+      content + new_gems
     end
   end
 
@@ -71,6 +72,11 @@ class CompactIndex::VersionsFile
           WHERE v.rubygem_id = r.id AND v.indexed is true AND v.created_at > ?
           ORDER BY v.created_at, r.name, concat_ws
       SQL
-      dataset.map { |entry| "#{entry[:name]} #{entry[:concat_ws]}" }.join("\n")
+      response = dataset.map { |entry| "#{entry[:name]} #{entry[:concat_ws]}" }.join("\n")
+      if response.empty?
+        response
+      else
+        response + "\n"
+      end
     end
 end

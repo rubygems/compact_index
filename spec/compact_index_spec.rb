@@ -19,7 +19,7 @@ describe CompactIndex do
   end
 
   describe '.versions' do
-    let(:data) { "a 1.0.0,1.0.1\nb 1.0.0\nc 1.0.0-java\na 2.0.0\na 2.0.1" }
+    let(:data) { "a 1.0.0,1.0.1\nb 1.0.0\nc 1.0.0-java\na 2.0.0\na 2.0.1\n" }
     before do
       allow_any_instance_of(CompactIndex::VersionsFile).to receive(:with_new_gems).and_return(data)
     end

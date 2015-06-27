@@ -22,7 +22,7 @@ describe CompactIndex::VersionsFile do
     builder.create_version(b, "b", "0.1.1", "java", { time: yesterday })
     builder.create_version(b, "b", "0.1.2", "ruby", { time: yesterday })
   end
-  let (:file_contents) { "created_at: 2015-06-11T23:29:59-03:00\n---\na 0.0.1\nb 0.0.2,0.1.1-java,0.1.2" } 
+  let (:file_contents) { "created_at: 2015-06-11T23:29:59-03:00\n---\na 0.0.1\nb 0.0.2,0.1.1-java,0.1.2\n" } 
 
   describe "#create"  do
     it "create the versions.list file with the gems on database" do
@@ -30,7 +30,7 @@ describe CompactIndex::VersionsFile do
       with_versions_file file.path do
         versions_file.create
         file.rewind
-        expect(file.read).to match(/\d+\n---\na 0\.0\.1\nb 0\.0\.2,0\.1\.1-java,0\.1\.2/)
+        expect(file.read).to match(/created_at:.*?\n---\na 0\.0\.1\nb 0\.0\.2,0\.1\.1-java,0\.1\.2/)
       end
     end
   end
@@ -51,7 +51,7 @@ describe CompactIndex::VersionsFile do
       with_versions_file file.path do
         versions_file.update
         file.rewind
-        expect(file.read).to eq(file_contents + "\nb 0.2.0\nb 0.2.0-rbx\nc 1.0.0")
+        expect(file.read).to eq(file_contents + "b 0.2.0\nb 0.2.0-rbx\nc 1.0.0\n")
       end
     end
   end
@@ -83,7 +83,7 @@ describe CompactIndex::VersionsFile do
       it "return the content from versions.list with new gems on bottom" do
         file = Tempfile.new('versions.list')
         with_versions_file file.path do
-          expect(versions_file.with_new_gems).to eq(file_contents + "\nb 0.2.0\nb 0.2.0-rbx\nc 1.0.0")
+          expect(versions_file.with_new_gems).to eq(file_contents + "b 0.2.0\nb 0.2.0-rbx\nc 1.0.0\n")
         end
       end
 
@@ -97,8 +97,8 @@ describe CompactIndex::VersionsFile do
         end
 
         it "return the content from versions.list with new gems on bottom" do
-          first_changes = "\nb 0.2.0\nb 0.2.0-rbx\nc 1.0.0"
-          second_changes = "\nb 0.2.2\nb 0.2.2-rbx\nc 1.0.1"
+          first_changes = "b 0.2.0\nb 0.2.0-rbx\nc 1.0.0\n"
+          second_changes = "b 0.2.2\nb 0.2.2-rbx\nc 1.0.1\n"
           file = Tempfile.new('versions.list')
           with_versions_file file.path do
             expect(versions_file.with_new_gems).to eq(file_contents + first_changes + second_changes )
