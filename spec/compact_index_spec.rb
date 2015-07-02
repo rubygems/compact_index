@@ -1,9 +1,6 @@
 require 'spec_helper'
-require 'support/gem_builder'
 
 describe CompactIndex do
-  let(:builder) { GemBuilder.new($db) }
-
   it 'has a version number' do
     expect(CompactIndex::VERSION).not_to be nil
   end
@@ -20,16 +17,6 @@ describe CompactIndex do
       it "returns the gem list" do
         expect(CompactIndex.names(gem_names)).to eq "---\ngem-1\ngem_2\n"
       end
-    end
-  end
-
-  describe '.versions' do
-    let(:data) { "a 1.0.0,1.0.1\nb 1.0.0\nc 1.0.0-java\na 2.0.0\na 2.0.1\n" }
-    before do
-      allow_any_instance_of(CompactIndex::VersionsFile).to receive(:with_new_gems).and_return(data)
-    end
-    it "returns versions.list" do
-      expect(CompactIndex.versions($db)).to eq(data)
     end
   end
 

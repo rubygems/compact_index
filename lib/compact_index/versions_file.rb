@@ -1,82 +1,33 @@
 require 'compact_index'
 
 class CompactIndex::VersionsFile
-  PATH = "versions.list"
-  def initialize(connection)
-    @conn = connection
-  end
-
-  def create_or_update
-    if File.exists? PATH
-      update
-    else
-      create
-    end
+  def initialize(path = ".")
+    @path = "#{path}/versions.list"
   end
 
   def create
     content = "created_at: #{Time.now.iso8601}"
     content += "\n---\n"
-    content += gems_for_new_file
+    #content += gems_for_new_file
     content += "\n"
 
-    File.open(PATH, 'w') do |io|
+    File.open(@path, 'w') do |io|
       io.write content
     end
   end
 
   def update
-    to_write = with_new_gems
-    File.open(PATH, 'w') do |io|
-      io.write to_write
-    end
   end
 
-  def with_new_gems
-    if new_gems.empty?
-      content
-    else
-      content + new_gems
-    end
+  def get(gems=nil)
   end
 
   private
     def content
-      File.open(PATH).read
-
+      File.open(@path).read
     end
 
     def created_at
-      DateTime.parse(File.mtime(PATH).to_s)
-    end
-
-    def gems_for_new_file
-      dataset = @conn[<<-SQL]
-          SELECT
-            r.name, string_agg(
-                      concat_ws('-', v.number, nullif(v.platform,'ruby')), ','
-                      ORDER BY number ASC
-                    )
-          FROM rubygems AS r, versions AS v
-          WHERE v.rubygem_id = r.id AND
-                v.indexed is true
-          GROUP BY r.name
-      SQL
-      dataset.map { |entry| "#{entry[:name]} #{entry[:string_agg]}" }.join("\n")
-    end
-
-    def new_gems
-      dataset = @conn[<<-SQL, created_at]
-          SELECT r.name, concat_ws('-', v.number, nullif(v.platform,'ruby'))
-          FROM rubygems AS r, versions AS v
-          WHERE v.rubygem_id = r.id AND v.indexed is true AND v.created_at > ?
-          ORDER BY v.created_at, r.name, concat_ws
-      SQL
-      response = dataset.map { |entry| "#{entry[:name]} #{entry[:concat_ws]}" }.join("\n")
-      if response.empty?
-        response
-      else
-        response + "\n"
-      end
+      DateTime.parse(File.mtime(@path).to_s)
     end
 end
