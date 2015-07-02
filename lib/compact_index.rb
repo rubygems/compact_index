@@ -3,31 +3,37 @@ require "compact_index/versions_file"
 require "compact_index/gem_info"
 
 module CompactIndex
-  def self.names(conn)
-    "---\n" + GemInfo.new(conn).names.join("\n") + "\n"
+  def self.names(gem_names)
+    "---\n" + gem_names.join("\n") + "\n"
   end
 
   def self.versions(conn)
     VersionsFile.new(conn).with_new_gems
   end
 
-  def self.info(conn, name)
+  def self.info(params)
     output = "---\n"
-    name = [name] if name.kind_of? String
-    GemInfo.new(conn).deps_for(name).each do |row|
-      output << version_line(row) << "\n"
+    params.each do |version|
+      output << version_line(version[:number], version[:dependencies]) << "\n"
     end
     output
   end
 
   private
-    def self.version_line(row)
-      deps = row[:dependencies].map do |d|
-        [d.first, d.last.gsub(/, /, "&")].join(":")
+    def self.version_line(version, dependencies = nil)
+      if dependencies
+        dependencies.sort! { |a,b| a[:gem] <=> b[:gem] }
+        deps = dependencies.map do |d|
+          [
+             d[:gem],
+             d[:version].gsub(/, /, "&")
+          ].join
+        end
+      else
+        deps = []
       end
 
-      line = row[:number].to_s
-      line << "-#{row[:platform]}" unless row[:platform] == "ruby"
+      line = version
       line << " " << deps.join(",") if deps.any?
       line
     end
