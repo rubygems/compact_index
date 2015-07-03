@@ -19,7 +19,7 @@ describe CompactIndex::VersionsFile do
     CompactIndex::VersionsFile.new(@file.path)
   end
 
-  describe "#create"  do
+  context "using the file" do
     let(:file) { Tempfile.new("create_versions.list") }
     let(:gems) do
       [
@@ -33,23 +33,41 @@ describe CompactIndex::VersionsFile do
       versions_file.create(gems)
     end
 
-    it "write the gems" do
-      expected_output = /created_at: .*?\n---\ngem5 1.0.1\ngem2 1.0.1,1.0.2-arch\n/
-      expect(file.open.read).to match(expected_output)
+    describe "#create"  do
+      it "write the gems" do
+        expected_file_output = /created_at: .*?\n---\ngem5 1.0.1\ngem2 1.0.1,1.0.2-arch\n/
+        expect(file.open.read).to match(expected_file_output)
+      end
+
+      it "add the date on top" do
+        date_regexp = /^created_at: (.*?)\n/
+        expect(
+          file.open.read.match(date_regexp)[0]
+        ).to match (
+          /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
+        )
+      end
+      pending "order by creation time"
+      pending "order version numbers"
     end
 
-    it "add the date on top" do
-      date_regexp = /^created_at: (.*?)\n/
-      expect(
-        file.open.read.match(date_regexp)[0]
-      ).to match (
-        /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
-      )
-    end
-  end
+    describe "#update" do
+      it "add a gem" do
+        gems = [{name: 'new-gem', versions: %w(1.0)}]
+        expected_output = "---\ngem5 1.0.1\ngem2 1.0.1,1.0.2-arch\nnew-gem 1.0\n"
+        versions_file.update(gems)
+        expect(file.open.read).to match(expected_output)
+      end
 
-  describe "#update" do
-    pending "update the versions.list file with given gems"
+      it "add again even if already listed" do
+        gems = [{name: 'gem5', versions: %w(3.0)}]
+        expected_output = "---\ngem5 1.0.1\ngem2 1.0.1,1.0.2-arch\ngem5 3.0\n"
+        versions_file.update(gems)
+        expect(file.open.read).to match(expected_output)
+      end
+      pending "order by creation time"
+      pending "order version numbers"
+    end
   end
 
   describe "#updated_at" do
@@ -76,6 +94,7 @@ describe CompactIndex::VersionsFile do
       )
     end
 
-    pending "extra gems in creation order"
+    pending "order by creation time"
+    pending "order version numbers"
   end
 end

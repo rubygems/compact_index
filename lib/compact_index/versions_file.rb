@@ -9,7 +9,6 @@ class CompactIndex::VersionsFile
     content = "created_at: #{Time.now.iso8601}"
     content += "\n---\n"
     content += parse_gems(gems)
-    content += "\n"
 
     File.open(@path, 'w') do |io|
       io.write content
@@ -17,6 +16,9 @@ class CompactIndex::VersionsFile
   end
 
   def update(gems)
+    File.open(@path, 'a') do |io|
+      io.write parse_gems(gems)
+    end
   end
 
   def contents(gems=nil)
