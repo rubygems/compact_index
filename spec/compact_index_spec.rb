@@ -1,3 +1,4 @@
+require 'tempfile'
 require 'spec_helper'
 
 describe CompactIndex do
@@ -20,7 +21,16 @@ describe CompactIndex do
     end
   end
 
-  describe '.versions' do
+  describe ".versions" do
+    it "delegates to VersionsFile#content" do
+      file = Tempfile.new("versions-endpoint")
+      gems = [{ name: "test", versions: [{ created_at: Time.now, number: "1.0" }] }]
+      expect(
+        CompactIndex.versions(file.path, gems)
+      ).to eq(
+        CompactIndex::VersionsFile.new(file.path).contents(gems)
+      )
+    end
   end
 
   describe '.info' do
