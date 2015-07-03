@@ -1,14 +1,14 @@
 require 'compact_index'
 
 class CompactIndex::VersionsFile
-  def initialize(path = ".")
-    @path = "#{path}/versions.list"
+  def initialize(file = nil)
+    @path = file || "/versions.list"
   end
 
-  def create
+  def create(gems)
     content = "created_at: #{Time.now.iso8601}"
     content += "\n---\n"
-    #content += gems_for_new_file
+    content += parse_gems(gems)
     content += "\n"
 
     File.open(@path, 'w') do |io|
@@ -16,18 +16,25 @@ class CompactIndex::VersionsFile
     end
   end
 
-  def update
+  def update(gems)
   end
 
-  def get(gems=nil)
+  def contents(gems=nil)
+    out = File.open(@path).read
+    out += parse_gems(gems) if gems
+    out
   end
+
+  def updated_at
+    DateTime.parse(File.mtime(@path).to_s)
+  end
+
 
   private
-    def content
-      File.open(@path).read
-    end
 
-    def created_at
-      DateTime.parse(File.mtime(@path).to_s)
+    def parse_gems(gems)
+      gems.reduce("") do |concat, entry|
+        concat + "#{entry[:name]} #{entry[:versions].join(',')}\n"
+      end
     end
 end

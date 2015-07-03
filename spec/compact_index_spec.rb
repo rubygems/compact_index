@@ -20,6 +20,9 @@ describe CompactIndex do
     end
   end
 
+  describe '.versions' do
+  end
+
   describe '.info' do
     it "without dependencies" do
       param = [{number: '1.0.1'}]
