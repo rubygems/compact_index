@@ -36,7 +36,14 @@ class CompactIndex::VersionsFile
 
     def parse_gems(gems)
       gems.reduce("") do |concat, entry|
-        concat + "#{entry[:name]} #{entry[:versions].join(',')}\n"
+        versions = sort_versions(entry[:versions])
+        concat + "#{entry[:name]} #{versions.join(',')}\n"
+      end
+    end
+
+    def sort_versions(versions)
+      versions.sort do |a,b|
+        gem_comp = Gem::Version.new(a) <=> Gem::Version.new(b)
       end
     end
 end

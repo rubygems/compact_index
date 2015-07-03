@@ -47,8 +47,15 @@ describe CompactIndex::VersionsFile do
           /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
         )
       end
+      it "order versions by number" do
+        file = Tempfile.new('versions-sort')
+        versions_file = CompactIndex::VersionsFile.new(file)
+        file.close
+        gems = [ { name: 'test', versions: %w(2.2 1.1.1-b 1.1.1-a 1.1.1 2.1.2) } ]
+        versions_file.create(gems)
+        expect(file.open.read).to match(/test 1.1.1-a,1.1.1-b,1.1.1,2.1.2,2.2/)
+      end
       pending "order by creation time"
-      pending "order version numbers"
     end
 
     describe "#update" do
@@ -65,8 +72,14 @@ describe CompactIndex::VersionsFile do
         versions_file.update(gems)
         expect(file.open.read).to match(expected_output)
       end
+
+      it "order versions by number" do
+        gems = [ { name: 'test', versions: %w(2.2 1.1.1-b 1.1.1-a 1.1.1 2.1.2) } ]
+        versions_file.update(gems)
+        expect(file.open.read).to match(/test 1.1.1-a,1.1.1-b,1.1.1,2.1.2,2.2/)
+      end
+
       pending "order by creation time"
-      pending "order version numbers"
     end
   end
 
@@ -94,7 +107,15 @@ describe CompactIndex::VersionsFile do
       )
     end
 
+    it "order versions by number" do
+      gems = [ { name: 'test', versions: %w(2.2 1.1.1-b 1.1.1-a 1.1.1 2.1.2) } ]
+      expect(
+        versions_file.contents(gems)
+      ).to match(
+        /test 1.1.1-a,1.1.1-b,1.1.1,2.1.2,2.2/
+      )
+    end
+
     pending "order by creation time"
-    pending "order version numbers"
   end
 end
