@@ -48,7 +48,7 @@ describe CompactIndex do
       param = [{number: '1.0.1', dependencies: [
         {gem: 'foo', version: '=1.0.1'}
       ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo=1.0.1\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:=1.0.1\n")
     end
 
     it "multiple dependencies" do
@@ -56,14 +56,14 @@ describe CompactIndex do
         {gem: 'foo1', version: '=1.0.1'},
         {gem: 'foo2', version: '<2.0'}
       ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo1=1.0.1,foo2<2.0\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo1:=1.0.1,foo2:<2.0\n")
     end
 
     it "dependency with multiple versions" do
       param = [{number: '1.0.1', dependencies: [
         {gem: 'foo', version: '>1.0, <2.0'},
       ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo>1.0&<2.0\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:>1.0&<2.0\n")
     end
 
     it "dependencies on alphabetic order" do
@@ -71,7 +71,7 @@ describe CompactIndex do
         {gem: 'b', version: '=1.2'},
         {gem: 'a', version: '=1.1'},
       ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 a=1.1,b=1.2\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1,b:=1.2\n")
     end
   end
 end

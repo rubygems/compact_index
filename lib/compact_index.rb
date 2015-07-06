@@ -28,7 +28,7 @@ module CompactIndex
           [
              d[:gem],
              d[:version].gsub(/, /, "&")
-          ].join
+          ].join(':')
         end
       else
         deps = []
