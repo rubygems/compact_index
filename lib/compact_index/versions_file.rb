@@ -41,11 +41,11 @@ class CompactIndex::VersionsFile
 
     def format_by_created_time(gems)
       by_created_at = {}
-      gems.each do |gem|
-        gem[:versions].each do |v|
+      gems.each do |name, versions|
+        versions.each do |v|
           by_created_at[v[:created_at]] ||= {}
-          by_created_at[v[:created_at]][gem[:name]] ||= []
-          by_created_at[v[:created_at]][gem[:name]] << v[:number]
+          by_created_at[v[:created_at]][name] ||= []
+          by_created_at[v[:created_at]][name] << v[:number]
         end
       end
       by_created_at.sort.map do |_,gems|
