@@ -7,8 +7,7 @@ module CompactIndex
     "---\n" + gem_names.join("\n") + "\n"
   end
 
-  def self.versions(path, gems)
-    versions_file = VersionsFile.new(path)
+  def self.versions(versions_file, gems)
     versions_file.contents(gems)
   end
 
