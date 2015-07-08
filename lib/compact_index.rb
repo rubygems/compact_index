@@ -36,7 +36,13 @@ module CompactIndex
       line = version[:number]
       line << " " << deps.join(",") if deps.any?
       line << "|"
-      line << "checksum:#{version[:checksum]}"
+
+      after_pipe = []
+      after_pipe << "checksum:#{version[:checksum]}"
+      after_pipe << "ruby:#{version[:ruby_version]}" if version[:ruby_version]
+      after_pipe << "rubygems:#{version[:rubygems_version]}" if version[:rubygems_version]
+      line << after_pipe.join(",")
+      
       line
     end
 end

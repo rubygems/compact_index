@@ -74,5 +74,20 @@ describe CompactIndex do
       ]}]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1,b:=1.2|checksum:abc123\n")
     end
+
+    it "show ruby required version" do
+      param = [{number: '1.0.1', checksum: 'abc123', ruby_version: '>1.8'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1|checksum:abc123,ruby:>1.8\n")
+    end
+
+    it "show rubygems required version" do
+      param = [{number: '1.0.1', checksum: 'abc123', rubygems_version: '=2.0'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1|checksum:abc123,rubygems:=2.0\n")
+    end
+
+    it "show both rubygems and ruby required versions" do
+      param = [{number: '1.0.1', checksum: 'abc123', ruby_version: '>1.9', rubygems_version: '=2.0'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1|checksum:abc123,ruby:>1.9,rubygems:=2.0\n")
+    end
   end
 end
