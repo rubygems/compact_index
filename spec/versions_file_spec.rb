@@ -42,7 +42,7 @@ describe CompactIndex::VersionsFile do
 
     describe "#create"  do
       it "write the gems" do
-        expected_file_output = /created_at: .*?\n---\ngem5 1.0.1\ngem2 1.0.1,1.0.2-arch\n/
+        expected_file_output = /created_at: .*?\n---\ngem2 1.0.1,1.0.2-arch\ngem5 1.0.1\n/
         expect(file.open.read).to match(expected_file_output)
       end
 
@@ -54,16 +54,29 @@ describe CompactIndex::VersionsFile do
           /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
         )
       end
+
+      it "order gems by name" do
+        file = Tempfile.new('versions-sort')
+        versions_file = CompactIndex::VersionsFile.new(file)
+        file.close
+        gems = {
+          "gem_b" => [ { created_at: gem_time, number: "1.0" } ],
+          "gem_a" => [ { created_at: gem_time, number: "1.0" } ]
+        }
+        versions_file.create(gems)
+        expect(file.open.read).to match(/gem_a 1.0\ngem_b 1.0/)
+      end
+
       it "order versions by number" do
         file = Tempfile.new('versions-sort')
         versions_file = CompactIndex::VersionsFile.new(file)
         file.close
         gems = { 'test' => [
           { created_at: gem_time, number: "2.2" },
-          { created_at: gem_time, number: "1.1.1-b" },
-          { created_at: gem_time, number: "1.1.1-a" },
-          { created_at: gem_time, number: "1.1.1" },
-          { created_at: gem_time, number: "2.1.2" }
+          { created_at: gem_time+1, number: "1.1.1-b" },
+          { created_at: gem_time+2, number: "1.1.1-a" },
+          { created_at: gem_time+3, number: "1.1.1" },
+          { created_at: gem_time+4, number: "2.1.2" }
         ]}
         versions_file.create(gems)
         expect(file.open.read).to match(/test 1.1.1-a,1.1.1-b,1.1.1,2.1.2,2.2/)
@@ -73,14 +86,14 @@ describe CompactIndex::VersionsFile do
     describe "#update" do
       it "add a gem" do
         gems = { 'new-gem' => [{ created_at: gem_time, number: "1.0" }]}
-        expected_output = "---\ngem5 1.0.1\ngem2 1.0.1,1.0.2-arch\nnew-gem 1.0\n"
+        expected_output = "---\ngem2 1.0.1,1.0.2-arch\ngem5 1.0.1\nnew-gem 1.0\n"
         versions_file.update(gems)
         expect(file.open.read).to match(expected_output)
       end
 
       it "add again even if already listed" do
         gems = { 'gem5' => [{ created_at: gem_time, number: "3.0" }]}
-        expected_output = "---\ngem5 1.0.1\ngem2 1.0.1,1.0.2-arch\ngem5 3.0\n"
+        expected_output = "---\ngem2 1.0.1,1.0.2-arch\ngem5 1.0.1\ngem5 3.0\n"
         versions_file.update(gems)
         expect(file.open.read).to match(expected_output)
       end

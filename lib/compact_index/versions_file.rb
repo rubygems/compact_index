@@ -8,7 +8,7 @@ class CompactIndex::VersionsFile
   def create(gems)
     content = "created_at: #{Time.now.iso8601}"
     content += "\n---\n"
-    content += parse_gems(gems)
+    content += parse_gems_for_create(gems)
 
     File.open(@path, 'w') do |io|
       io.write content
@@ -33,6 +33,13 @@ class CompactIndex::VersionsFile
 
 
   private
+
+
+    def parse_gems_for_create(gems)
+      fixed_format_gems = gems.map { |k,v| { name: k, versions: v.map { |x| x[:number] } } }
+      fixed_format_gems.sort! { |a,b| a[:name] <=> b[:name] }
+      gem_lines(fixed_format_gems)
+    end
 
     def parse_gems(gems)
       sorted_gems = format_by_created_time(gems)
