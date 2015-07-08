@@ -14,16 +14,16 @@ module CompactIndex
   def self.info(params)
     output = "---\n"
     params.each do |version|
-      output << version_line(version[:number], version[:dependencies]) << "\n"
+      output << version_line(version) << "\n"
     end
     output
   end
 
   private
-    def self.version_line(version, dependencies = nil)
-      if dependencies
-        dependencies.sort! { |a,b| a[:gem] <=> b[:gem] }
-        deps = dependencies.map do |d|
+    def self.version_line(version)
+      if version[:dependencies]
+        version[:dependencies].sort! { |a,b| a[:gem] <=> b[:gem] }
+        deps = version[:dependencies].map do |d|
           [
              d[:gem],
              d[:version].gsub(/, /, "&")
@@ -33,8 +33,10 @@ module CompactIndex
         deps = []
       end
 
-      line = version
+      line = version[:number]
       line << " " << deps.join(",") if deps.any?
+      line << "|"
+      line << "checksum:#{version[:checksum]}"
       line
     end
 end
