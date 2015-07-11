@@ -36,43 +36,58 @@ describe CompactIndex do
 
   describe '.info' do
     it "without dependencies" do
-      param = [{number: '1.0.1'}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1\n")
+      param = [{number: '1.0.1', checksum: 'abc123'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1|checksum:abc123\n")
     end
 
     it "multiple versions" do
-      param = [{number: '1.0.1'}, {number: '1.0.2'}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1\n1.0.2\n")
+      param = [{number: '1.0.1', checksum: 'abc1'}, {number: '1.0.2', checksum: 'abc2'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1|checksum:abc1\n1.0.2|checksum:abc2\n")
     end
 
     it "one dependency" do
-      param = [{number: '1.0.1', dependencies: [
-        {gem: 'foo', version: '=1.0.1'}
+      param = [{number: '1.0.1', checksum: "abc123", dependencies: [
+        {gem: 'foo', version: '=1.0.1', checksum: 'abc123'}
       ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:=1.0.1\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:=1.0.1|checksum:abc123\n")
     end
 
     it "multiple dependencies" do
-      param = [{number: '1.0.1', dependencies: [
+      param = [{number: '1.0.1', checksum: "abc123", dependencies: [
         {gem: 'foo1', version: '=1.0.1'},
         {gem: 'foo2', version: '<2.0'}
       ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo1:=1.0.1,foo2:<2.0\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo1:=1.0.1,foo2:<2.0|checksum:abc123\n")
     end
 
     it "dependency with multiple versions" do
-      param = [{number: '1.0.1', dependencies: [
+      param = [{number: '1.0.1', checksum: "abc123", dependencies: [
         {gem: 'foo', version: '>1.0, <2.0'},
       ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:>1.0&<2.0\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:>1.0&<2.0|checksum:abc123\n")
     end
 
     it "dependencies on alphabetic order" do
-      param = [{number: '1.0.1', dependencies: [
+      param = [{number: '1.0.1', checksum: "abc123", dependencies: [
         {gem: 'b', version: '=1.2'},
         {gem: 'a', version: '=1.1'},
       ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1,b:=1.2\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1,b:=1.2|checksum:abc123\n")
+    end
+
+    it "show ruby required version" do
+      param = [{number: '1.0.1', checksum: 'abc123', ruby_version: '>1.8'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1|checksum:abc123,ruby:>1.8\n")
+    end
+
+    it "show rubygems required version" do
+      param = [{number: '1.0.1', checksum: 'abc123', rubygems_version: '=2.0'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1|checksum:abc123,rubygems:=2.0\n")
+    end
+
+    it "show both rubygems and ruby required versions" do
+      param = [{number: '1.0.1', checksum: 'abc123', ruby_version: '>1.9', rubygems_version: '=2.0'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1|checksum:abc123,ruby:>1.9,rubygems:=2.0\n")
     end
   end
 end
