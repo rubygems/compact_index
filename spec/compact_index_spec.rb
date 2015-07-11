@@ -25,7 +25,7 @@ describe CompactIndex do
     it "delegates to VersionsFile#content" do
       file = Tempfile.new("versions-endpoint")
       versions_file = CompactIndex::VersionsFile.new(file.path)
-      gems = { "test" => [{ created_at: Time.now, number: "1.0" }] }
+      gems = { "test" => [{ created_at: Time.now, number: "1.0", checksum: 'abc123' }] }
       expect(
         CompactIndex.versions(versions_file, gems)
       ).to eq(
