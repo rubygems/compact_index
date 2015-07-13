@@ -5,22 +5,6 @@ class CompactIndex::VersionsFile
     @path = file || "/versions.list"
   end
 
-  def create(gems)
-    content = "created_at: #{Time.now.iso8601}"
-    content += "\n---\n"
-    content += parse_gems_for_create(gems)
-
-    File.open(@path, 'w') do |io|
-      io.write content
-    end
-  end
-
-  def update(gems)
-    File.open(@path, 'a') do |io|
-      io.write parse_gems(gems)
-    end
-  end
-
   def contents(gems=nil)
     out = File.open(@path).read
     out += parse_gems(gems) if gems
@@ -28,12 +12,40 @@ class CompactIndex::VersionsFile
   end
 
   def updated_at
-    DateTime.parse(File.mtime(@path).to_s)
+    if File.exists? @path
+      DateTime.parse(File.mtime(@path).to_s)
+    else
+      Time.new('1984')
+    end
+  end
+
+  def update_with(gems)
+    if File.exists?(@path) && !File.zero?(@path)
+      update(gems)
+    else
+      create(gems)
+    end
   end
 
 
   private
 
+
+    def create(gems)
+      content = "created_at: #{Time.now.iso8601}"
+      content += "\n---\n"
+      content += parse_gems_for_create(gems)
+
+      File.open(@path, 'w') do |io|
+        io.write content
+      end
+    end
+
+    def update(gems)
+      File.open(@path, 'a') do |io|
+        io.write parse_gems(gems)
+      end
+    end
 
     def parse_gems_for_create(gems)
       fixed_format_gems = gems.map do |k,v|
