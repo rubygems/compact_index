@@ -33,7 +33,8 @@ module CompactIndex
       end
 
       line = version[:number]
-      line << " " << deps.join(",") if deps.any?
+      line << " " 
+      line << deps.join(",") if deps.any?
       line << "|"
 
       after_pipe = []

@@ -15,7 +15,7 @@ class CompactIndex::VersionsFile
     if File.exists? @path
       DateTime.parse(File.mtime(@path).to_s)
     else
-      Time.new('1984')
+      Time.at(0)
     end
   end
 
