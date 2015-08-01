@@ -1,3 +1,9 @@
+## 0.6.0 (August 1, 2015)
+
+Features:
+
+  - Change info and versions interface to receive separated number and version
+
 ## 0.5.2 (July 20, 2015)
 
 Bugfixes:
