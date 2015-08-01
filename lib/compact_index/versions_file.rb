@@ -88,8 +88,6 @@ class CompactIndex::VersionsFile
     end
 
     def sort_versions(versions)
-      versions.sort do |a,b|
-        gem_comp = Gem::Version.new(a) <=> Gem::Version.new(b)
-      end
+      versions.sort_by { |v| Gem::Version.create(v) }
     end
 end
