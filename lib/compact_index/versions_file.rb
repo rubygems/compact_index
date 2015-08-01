@@ -49,7 +49,7 @@ class CompactIndex::VersionsFile
 
     def parse_gems_for_create(gems)
       fixed_format_gems = gems.map do |k,v|
-        numbers = v.map { |x| x[:number] }
+        numbers = v.map { |x| [x[:number], x[:platform] ] }
         { name: k, versions: numbers, checksum: v.first[:checksum] }
       end
       fixed_format_gems.sort! { |a,b| a[:name] <=> b[:name] }

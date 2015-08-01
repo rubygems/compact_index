@@ -31,7 +31,7 @@ describe CompactIndex::VersionsFile do
           ],
           "gem2" => [
             build_version(number: "1.0.1"),
-            build_version(number: "1.0.2-arch")
+            build_version(number: "1.0.2", platform: 'arch')
           ]
         }
     end
@@ -141,7 +141,7 @@ describe CompactIndex::VersionsFile do
     it "receive extra gems" do
       extra_gems = {"gem3" => [
         build_version( { created_at: gem_time, number: "1.0.1" } ),
-        build_version( { created_at: gem_time, number: "1.0.2-arch" } )
+        build_version( { created_at: gem_time, number: "1.0.2", platform: 'arch' } )
       ]}
       expect(
         versions_file.contents(extra_gems)
