@@ -190,6 +190,17 @@ describe CompactIndex::VersionsFile do
       )
     end
 
+    it "has the platform" do
+      gems = { 'test' => [
+        build_version( { checksum: 'abc123', number: '1.0', platform: 'jruby' } )
+      ]}
+      expect(
+        versions_file.contents(gems)
+      ).to match(
+        /test 1.0-jruby abc123/
+      )
+    end
+
     pending "conflicting checksums"
 
   end

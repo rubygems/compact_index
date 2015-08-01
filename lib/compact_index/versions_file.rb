@@ -68,7 +68,7 @@ class CompactIndex::VersionsFile
         versions.each do |v|
           by_created_at[v[:created_at]] ||= {}
           by_created_at[v[:created_at]][name] ||= []
-          by_created_at[v[:created_at]][name] << v[:number]
+          by_created_at[v[:created_at]][name] << number_and_platform(v[:number], v[:platform])
           checksums[v[:created_at]] ||= {}
           checksums[v[:created_at]] = v[:checksum]
         end
@@ -89,5 +89,13 @@ class CompactIndex::VersionsFile
 
     def sort_versions(versions)
       versions.sort_by { |v| Gem::Version.create(v) }
+    end
+
+    def number_and_platform(number, platform)
+      if platform.nil? || platform == 'ruby'
+        number
+      else
+        "#{number}-#{platform}"
+      end
     end
 end
