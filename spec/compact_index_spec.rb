@@ -75,6 +75,14 @@ describe CompactIndex do
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1,b:=1.2|checksum:abc123\n")
     end
 
+    it "dependencies have platform" do
+      param = [{number: '1.0.1', checksum: "abc123", dependencies: [
+        {gem: 'b', version: '=1.2', platform: 'darwin-13'},
+        {gem: 'a', version: '=1.1', platform: 'jruby'},
+      ]}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1-jruby,b:=1.2-darwin-13|checksum:abc123\n")
+    end
+
     it "show ruby required version" do
       param = [{number: '1.0.1', checksum: 'abc123', ruby_version: '>1.8'}]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc123,ruby:>1.8\n")
@@ -88,6 +96,11 @@ describe CompactIndex do
     it "show both rubygems and ruby required versions" do
       param = [{number: '1.0.1', checksum: 'abc123', ruby_version: '>1.9', rubygems_version: '=2.0'}]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc123,ruby:>1.9,rubygems:=2.0\n")
+    end
+
+    it "adds platform next to version number" do
+      param = [{number: '1.0.1', checksum: 'abc123', platform: 'jruby'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1-jruby |checksum:abc123\n")
     end
   end
 end

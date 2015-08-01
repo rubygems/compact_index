@@ -25,14 +25,14 @@ module CompactIndex
         deps = version[:dependencies].map do |d|
           [
              d[:gem],
-             d[:version].gsub(/, /, "&")
+             number_and_platform(d[:version],d[:platform]).gsub(/, /, "&")
           ].join(':')
         end
       else
         deps = []
       end
 
-      line = version[:number]
+      line = number_and_platform(version[:number], version[:platform])
       line << " "
       line << deps.join(",")
       line << "|"
@@ -42,5 +42,13 @@ module CompactIndex
       line << ",rubygems:#{version[:rubygems_version]}" if version[:rubygems_version]
 
       line
+    end
+
+    def self.number_and_platform(number, platform)
+      if platform.nil? || platform == 'ruby'
+        number
+      else
+        "#{number}-#{platform}"
+      end
     end
 end
