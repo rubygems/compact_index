@@ -49,7 +49,7 @@ class CompactIndex::VersionsFile
 
     def parse_gems_for_create(gems)
       fixed_format_gems = gems.map do |k,v|
-        numbers = v.map { |x| x[:number] }
+        numbers = v.map { |x| [x[:number], x[:platform] ] }
         { name: k, versions: numbers, checksum: v.first[:checksum] }
       end
       fixed_format_gems.sort! { |a,b| a[:name] <=> b[:name] }
@@ -68,7 +68,7 @@ class CompactIndex::VersionsFile
         versions.each do |v|
           by_created_at[v[:created_at]] ||= {}
           by_created_at[v[:created_at]][name] ||= []
-          by_created_at[v[:created_at]][name] << number_and_platform(v[:number], v[:platform])
+          by_created_at[v[:created_at]][name] << [v[:number], v[:platform]]
           checksums[v[:created_at]] ||= {}
           checksums[v[:created_at]] = v[:checksum]
         end
@@ -83,12 +83,13 @@ class CompactIndex::VersionsFile
     def gem_lines(gems)
       gems.reduce("") do |concat, entry|
         versions = sort_versions(entry[:versions])
+        versions.map! { |version, platform| number_and_platform(version, platform) }
         concat << "#{entry[:name]} #{versions.join(',')} #{entry[:checksum]}\n"
       end
     end
 
     def sort_versions(versions)
-      versions.sort_by { |v| Gem::Version.create(v) }
+      versions.sort_by { |v| Gem::Version.create(v.first) }
     end
 
     def number_and_platform(number, platform)
