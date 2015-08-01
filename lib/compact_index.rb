@@ -3,7 +3,7 @@ require "compact_index/versions_file"
 
 module CompactIndex
   def self.names(gem_names)
-    "---\n" + gem_names.join("\n") + "\n"
+    "---\n" << gem_names.join("\n") << "\n"
   end
 
   def self.versions(versions_file, gems)
@@ -33,16 +33,14 @@ module CompactIndex
       end
 
       line = version[:number]
-      line << " " 
-      line << deps.join(",") if deps.any?
+      line << " "
+      line << deps.join(",")
       line << "|"
 
-      after_pipe = []
-      after_pipe << "checksum:#{version[:checksum]}"
-      after_pipe << "ruby:#{version[:ruby_version]}" if version[:ruby_version]
-      after_pipe << "rubygems:#{version[:rubygems_version]}" if version[:rubygems_version]
-      line << after_pipe.join(",")
-      
+      line << "checksum:#{version[:checksum]}"
+      line << ",ruby:#{version[:ruby_version]}" if version[:ruby_version]
+      line << ",rubygems:#{version[:rubygems_version]}" if version[:rubygems_version]
+
       line
     end
 end

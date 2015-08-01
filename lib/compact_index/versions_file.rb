@@ -6,8 +6,8 @@ class CompactIndex::VersionsFile
   end
 
   def contents(gems=nil)
-    out = File.open(@path).read
-    out += parse_gems(gems) if gems
+    out = File.read(@path)
+    out << parse_gems(gems) if gems
     out
   end
 
@@ -33,8 +33,8 @@ class CompactIndex::VersionsFile
 
     def create(gems)
       content = "created_at: #{Time.now.iso8601}"
-      content += "\n---\n"
-      content += parse_gems_for_create(gems)
+      content << "\n---\n"
+      content << parse_gems_for_create(gems)
 
       File.open(@path, 'w') do |io|
         io.write content
@@ -83,7 +83,7 @@ class CompactIndex::VersionsFile
     def gem_lines(gems)
       gems.reduce("") do |concat, entry|
         versions = sort_versions(entry[:versions])
-        concat + "#{entry[:name]} #{versions.join(',')} #{entry[:checksum]}\n"
+        concat << "#{entry[:name]} #{versions.join(',')} #{entry[:checksum]}\n"
       end
     end
 
