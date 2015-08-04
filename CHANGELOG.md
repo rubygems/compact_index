@@ -1,3 +1,9 @@
+## 0.7.0 (August 4, 2015)
+
+Features:
+
+  - Change versions file interface to receive separated number and platform
+
 ## 0.6.0 (August 1, 2015)
 
 Features:
