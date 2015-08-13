@@ -1,3 +1,10 @@
+## 0.8.0 (August 13, 2015)
+
+Features:
+
+  - Change info file interface to accept create_at
+  - Order info output accordingly to version create_at
+
 ## 0.7.0 (August 4, 2015)
 
 Features:
