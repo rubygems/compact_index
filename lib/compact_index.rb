@@ -12,7 +12,7 @@ module CompactIndex
 
   def self.info(params)
     output = "---\n"
-    params.each do |version|
+    params.sort { |a,b| a[:created_at] <=> b[:created_at] }.each do |version|
       output << version_line(version) << "\n"
     end
     output

@@ -45,6 +45,13 @@ describe CompactIndex do
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc1\n1.0.2 |checksum:abc2\n")
     end
 
+    it "order multiple versions by date" do
+      today = Time.now
+      yesterday = Time.at(Time.now.to_i - 86400)
+      param = [{number: '1.0.1', checksum: 'abc1', created_at: today}, {number: '1.0.2', checksum: 'abc2', created_at: yesterday}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.2 |checksum:abc2\n1.0.1 |checksum:abc1\n")
+    end
+
     it "one dependency" do
       param = [{number: '1.0.1', checksum: "abc123", dependencies: [
         {gem: 'foo', version: '=1.0.1', checksum: 'abc123'}
