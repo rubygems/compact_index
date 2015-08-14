@@ -1,3 +1,9 @@
+## 0.8.1 (August 13, 2015)
+
+Bugfixes:
+
+  - deal with nil created_at when sorting on info
+
 ## 0.8.0 (August 13, 2015)
 
 Features:
