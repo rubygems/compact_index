@@ -1,5 +1,6 @@
 require 'tempfile'
 require 'spec_helper'
+require 'support/versions'
 
 describe CompactIndex do
   it 'has a version number' do
@@ -25,7 +26,7 @@ describe CompactIndex do
     it "delegates to VersionsFile#content" do
       file = Tempfile.new("versions-endpoint")
       versions_file = CompactIndex::VersionsFile.new(file.path)
-      gems = { "test" => [build_version] }
+      gems = [{ name: "test", versions: [build_version] }]
       expect(
         CompactIndex.versions(versions_file, gems)
       ).to eq(

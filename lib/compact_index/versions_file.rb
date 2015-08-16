@@ -48,48 +48,44 @@ class CompactIndex::VersionsFile
     end
 
     def parse_gems_for_create(gems)
-      fixed_format_gems = gems.map do |k,v|
-        numbers = v.map { |x| [x[:number], x[:platform] ] }
-        { name: k, versions: numbers, checksum: v.first[:checksum] }
+      # Join all versions for each gem in one hash
+      gems_hash = {}
+      gems.each do |entry|
+        gems_hash[entry[:name]] ||= []
+        gems_hash[entry[:name]] += entry[:versions]
       end
-      fixed_format_gems.sort! { |a,b| a[:name] <=> b[:name] }
-      gem_lines(fixed_format_gems)
+
+      # Transform hash in a list of line informations to be printed
+      gems = gems_hash.map do |gem, versions|
+        { name: gem, versions: versions, checksum: versions.first[:checksum] }
+      end
+
+      # Sort gems by name and versions by number
+      gems.sort! { |a,b| a[:name] <=> b[:name] }
+      gems.each do |entry|
+        entry[:versions].sort_by! { |v| Gem::Version.create(v[:number]) }
+      end
+
+      gem_lines(gems)
     end
 
     def parse_gems(gems)
-      sorted_gems = format_by_created_time(gems)
-      gem_lines(sorted_gems)
-    end
-
-    def format_by_created_time(gems)
-      by_created_at = {}
-      checksums = {}
-      gems.each do |name, versions|
-        versions.each do |v|
-          by_created_at[v[:created_at]] ||= {}
-          by_created_at[v[:created_at]][name] ||= []
-          by_created_at[v[:created_at]][name] << [v[:number], v[:platform]]
-          checksums[v[:created_at]] ||= {}
-          checksums[v[:created_at]] = v[:checksum]
-        end
+      gem_lines = gems.map do |entry|
+        {
+          name: entry[:name],
+          versions: entry[:versions],
+          checksum: entry[:versions].first[:checksum]
+        }
       end
-      by_created_at.sort.map do |created_at,gems|
-        gems.map do |name, versions|
-          { name: name, versions: versions, checksum: checksums[created_at] }
-        end
-      end.flatten
+      gem_lines(gem_lines)
     end
 
     def gem_lines(gems)
       gems.reduce("") do |concat, entry|
-        versions = sort_versions(entry[:versions])
-        versions.map! { |version, platform| number_and_platform(version, platform) }
-        concat << "#{entry[:name]} #{versions.join(',')} #{entry[:checksum]}\n"
+        versions = entry[:versions]
+        number_and_plat = versions.map { |version| number_and_platform(version[:number], version[:platform]) }
+        concat << "#{entry[:name]} #{number_and_plat.join(',')} #{entry[:checksum]}\n"
       end
-    end
-
-    def sort_versions(versions)
-      versions.sort_by { |v| Gem::Version.create(v.first) }
     end
 
     def number_and_platform(number, platform)

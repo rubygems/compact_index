@@ -25,15 +25,13 @@ describe CompactIndex::VersionsFile do
   context "using the file" do
     let(:file) { Tempfile.new("create_versions.list") }
     let(:gems) do
-        {
-          "gem5" => [
-            build_version(number: "1.0.1")
-          ],
-          "gem2" => [
+        [
+         { name: "gem5", versions: [ build_version(number: "1.0.1") ] },
+         { name: "gem2", versions: [
             build_version(number: "1.0.1"),
             build_version(number: "1.0.2", platform: 'arch')
-          ]
-        }
+          ]}
+        ]
     end
     let(:versions_file) { versions_file = CompactIndex::VersionsFile.new(file.path) }
 
@@ -59,8 +57,10 @@ describe CompactIndex::VersionsFile do
         it "order gems by name" do
           file = Tempfile.new('versions-sort')
           versions_file = CompactIndex::VersionsFile.new(file)
-          gems = { "gem_b" => [ build_version ], "gem_a" => [ build_version ]
-          }
+          gems = [
+            { name: "gem_b", versions: [ build_version ] },
+            { name: "gem_a", versions: [ build_version ] }
+          ]
           versions_file.update_with(gems)
           expect(file.open.read).to match(/gem_a 1.0 abc123\ngem_b 1.0/)
         end
@@ -68,13 +68,13 @@ describe CompactIndex::VersionsFile do
         it "order versions by number" do
           file = Tempfile.new('versions-sort')
           versions_file = CompactIndex::VersionsFile.new(file)
-          gems = { 'test' => [
-            build_version( { created_at: gem_time+0, number: "2.2" } ),
-            build_version( { created_at: gem_time+1, number: "1.1.1-b" } ),
-            build_version( { created_at: gem_time+2, number: "1.1.1-a" } ),
-            build_version( { created_at: gem_time+3, number: "1.1.1" } ),
-            build_version( { created_at: gem_time+4, number: "2.1.2" } )
-          ]}
+          gems = [{ name: 'test', versions: [
+            build_version( { number: "2.2" } ),
+            build_version( { number: "1.1.1-b" } ),
+            build_version( { number: "1.1.1-a" } ),
+            build_version( { number: "1.1.1" } ),
+            build_version( { number: "2.1.2" } )
+          ]}]
           versions_file.update_with(gems)
           expect(file.open.read).to match(/test 1.1.1-a,1.1.1-b,1.1.1,2.1.2,2.2 abc123/)
         end
@@ -84,40 +84,17 @@ describe CompactIndex::VersionsFile do
         before(:each) { versions_file.send('create',gems) }
 
         it "add a gem" do
-          gems = { 'new-gem' => [build_version]}
+          gems = [{ name: 'new-gem', versions: [build_version]}]
           expected_output = "---\ngem2 1.0.1,1.0.2-arch abc123\ngem5 1.0.1 abc123\nnew-gem 1.0 abc123\n"
           versions_file.update_with(gems)
           expect(file.open.read).to match(expected_output)
         end
 
         it "add again even if already listed" do
-          gems = { 'gem5' => [ build_version(number: "3.0") ] }
+          gems = [{ name: 'gem5', versions:  [ build_version(number: "3.0") ] }]
           expected_output = "---\ngem2 1.0.1,1.0.2-arch abc123\ngem5 1.0.1 abc123\ngem5 3.0 abc123\n"
           versions_file.update_with(gems)
           expect(file.open.read).to match(expected_output)
-        end
-
-        it "order versions by number" do
-          gems = { 'test' => [
-            build_version( { created_at: gem_time, number: "2.2" } ),
-            build_version( { created_at: gem_time, number: "1.1.1-b" } ),
-            build_version( { created_at: gem_time, number: "1.1.1-a" } ),
-            build_version( { created_at: gem_time, number: "1.1.1" } ),
-            build_version( { created_at: gem_time, number: "2.1.2" } )
-          ]}
-          versions_file.update_with(gems)
-          expect(file.open.read).to match(/test 1.1.1-a,1.1.1-b,1.1.1,2.1.2,2.2 abc123/)
-        end
-
-        it "order by creation time" do
-          gems = { 'test' => [
-            build_version( { created_at: gem_time, number: "2.2" } ),
-            build_version( { created_at: gem_time + 1, number: "2.3" } ),
-            build_version( { created_at: gem_time + 1, number: "2.4" } ),
-            build_version( { created_at: gem_time + 2, number: "2.5" } )
-          ]}
-          versions_file.update_with(gems)
-          expect(file.open.read).to match(/test 2.2 abc123\ntest 2.3,2.4 abc123\ntest 2.5 abc123\n/)
         end
       end
     end
@@ -139,10 +116,10 @@ describe CompactIndex::VersionsFile do
     end
 
     it "receive extra gems" do
-      extra_gems = {"gem3" => [
-        build_version( { created_at: gem_time, number: "1.0.1" } ),
-        build_version( { created_at: gem_time, number: "1.0.2", platform: 'arch' } )
-      ]}
+      extra_gems = [{ name: "gem3", versions: [
+        build_version( { number: "1.0.1" } ),
+        build_version( { number: "1.0.2", platform: 'arch' } )
+      ]}]
       expect(
         versions_file.contents(extra_gems)
       ).to eq(
@@ -150,39 +127,10 @@ describe CompactIndex::VersionsFile do
       )
     end
 
-    it "order versions by number" do
-      gems = { 'test' => [
-        build_version( { created_at: gem_time, number: "2.2" } ),
-        build_version( { created_at: gem_time, number: "1.1.1-b" } ),
-        build_version( { created_at: gem_time, number: "1.1.1-a" } ),
-        build_version( { created_at: gem_time, number: "1.1.1" } ),
-        build_version( { created_at: gem_time, number: "2.1.2" } )
-      ]}
-      expect(
-        versions_file.contents(gems)
-      ).to match(
-        /test 1.1.1-a,1.1.1-b,1.1.1,2.1.2,2.2 abc123/
-      )
-    end
-
-    it "order by creation time" do
-      gems = { 'test' => [
-        build_version( { created_at: gem_time, number: "2.2" } ),
-        build_version( { created_at: gem_time + 1, number: "2.3" } ),
-        build_version( { created_at: gem_time + 1, number: "2.4" } ),
-        build_version( { created_at: gem_time + 2, number: "2.5" } )
-      ]}
-      expect(
-        versions_file.contents(gems)
-      ).to match(
-        /test 2.2 abc123\ntest 2.3,2.4 abc123\ntest 2.5 abc123\n/
-      )
-    end
-
     it "has checksum" do
-      gems = { 'test' => [
+      gems = [{ name: 'test', versions: [
         build_version( { checksum: 'testsum', number: '1.0' } )
-      ]}
+      ]}]
       expect(
         versions_file.contents(gems)
       ).to match(
@@ -191,9 +139,9 @@ describe CompactIndex::VersionsFile do
     end
 
     it "has the platform" do
-      gems = { 'test' => [
+      gems = [{ name: 'test', versions: [
         build_version( { checksum: 'abc123', number: '1.0', platform: 'jruby' } )
-      ]}
+      ]}]
       expect(
         versions_file.contents(gems)
       ).to match(
