@@ -12,16 +12,7 @@ module CompactIndex
 
   def self.info(params)
     output = "---\n"
-    sorted = params.sort do |a,b|
-      if a[:created_at] and b[:created_at]
-        a[:created_at] <=> b[:created_at] 
-      elsif a[:created_at]
-        -1
-      else
-        1
-      end
-    end
-    sorted.each do |version|
+    params.each do |version|
       output << version_line(version) << "\n"
     end
     output
@@ -30,7 +21,7 @@ module CompactIndex
   private
     def self.version_line(version)
       if version[:dependencies]
-        version[:dependencies].sort! { |a,b| a[:gem] <=> b[:gem] }
+        version[:dependencies]
         deps = version[:dependencies].map do |d|
           [
              d[:gem],

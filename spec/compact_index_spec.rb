@@ -43,8 +43,8 @@ describe CompactIndex do
     it "multiple versions" do
       today = Time.now
       yesterday = Time.at(Time.now.to_i - 86400)
-      param = [{number: '1.0.1', checksum: 'abc1', created_at: today}, {number: '1.0.2', checksum: 'abc2', created_at: yesterday}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.2 |checksum:abc2\n1.0.1 |checksum:abc1\n")
+      param = [{number: '1.0.1', checksum: 'abc1'}, {number: '1.0.2', checksum: 'abc2'}]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc1\n1.0.2 |checksum:abc2\n")
     end
 
     it "one dependency" do
@@ -69,18 +69,10 @@ describe CompactIndex do
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:>1.0&<2.0|checksum:abc123\n")
     end
 
-    it "dependencies on alphabetic order" do
-      param = [{number: '1.0.1', checksum: "abc123", dependencies: [
-        {gem: 'b', version: '=1.2'},
-        {gem: 'a', version: '=1.1'},
-      ]}]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1,b:=1.2|checksum:abc123\n")
-    end
-
     it "dependencies have platform" do
       param = [{number: '1.0.1', checksum: "abc123", dependencies: [
-        {gem: 'b', version: '=1.2', platform: 'darwin-13'},
         {gem: 'a', version: '=1.1', platform: 'jruby'},
+        {gem: 'b', version: '=1.2', platform: 'darwin-13'},
       ]}]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1-jruby,b:=1.2-darwin-13|checksum:abc123\n")
     end
