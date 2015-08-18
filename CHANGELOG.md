@@ -1,3 +1,11 @@
+## 0.9.0 (August 17, 2015)
+
+Features:
+
+  - Remove sort responsability from compact_index
+  - Change interface for versions_file in order to receive sorted gems
+
+
 ## 0.8.1 (August 13, 2015)
 
 Bugfixes:
