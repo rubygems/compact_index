@@ -1,3 +1,9 @@
+## 0.9.1 (August 19, 2015)
+
+Features:
+
+  - Add an option to CompactIndex.versions to calculate info_checksums on the fly
+
 ## 0.9.0 (August 17, 2015)
 
 Features:
