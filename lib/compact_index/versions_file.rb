@@ -5,7 +5,11 @@ class CompactIndex::VersionsFile
     @path = file || "/versions.list"
   end
 
-  def contents(gems=nil)
+  def contents(gems=nil, args = {})
+    if args[:calculate_checksums]
+      gems = calculate_checksums(gems)
+    end
+
     out = File.read(@path)
     out << parse_gems(gems) if gems
     out
@@ -90,9 +94,16 @@ class CompactIndex::VersionsFile
 
     def number_and_platform(number, platform)
       if platform.nil? || platform == 'ruby'
-        number
+        number.dup
       else
         "#{number}-#{platform}"
+      end
+    end
+
+    def calculate_checksums(gems)
+      gems.each do |gem|
+        info_checksum = Digest::MD5.hexdigest(CompactIndex.info(gem[:versions]))
+        gem[:versions].first[:checksum] = info_checksum
       end
     end
 end

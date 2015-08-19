@@ -149,7 +149,30 @@ describe CompactIndex::VersionsFile do
       )
     end
 
-    pending "conflicting checksums"
+    describe "with calculate_info_checksums flag" do
+      context "passing dependencies as parameters" do
+        let(:gems) do
+          [
+            {
+              name: 'test',
+              versions: [
+                build_version(number: '1.0', platform: 'ruby').merge(
+                  { dependencies: [ { gem: 'foo', version: '=1.0.1', checksum: 'abc123' } ] }
+                )
+              ]
+            }
+          ]
+        end
+        it "calculates the info_checksums on the fly" do
+          expect(
+            versions_file.contents(gems, calculate_checksums: true)
+          ).to match(
+            /test 1.0 a6beccb34e26aa9e082bda0d8fa4ee77/
+          )
+        end
+      end
+    end
 
+    pending "conflicting checksums"
   end
 end

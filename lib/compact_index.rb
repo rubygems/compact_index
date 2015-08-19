@@ -6,8 +6,8 @@ module CompactIndex
     "---\n" << gem_names.join("\n") << "\n"
   end
 
-  def self.versions(versions_file, gems)
-    versions_file.contents(gems)
+  def self.versions(versions_file, gems, args)
+    versions_file.contents(gems, args)
   end
 
   def self.info(params)
@@ -46,7 +46,7 @@ module CompactIndex
 
     def self.number_and_platform(number, platform)
       if platform.nil? || platform == 'ruby'
-        number
+        number.dup
       else
         "#{number}-#{platform}"
       end
