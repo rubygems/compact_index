@@ -87,16 +87,7 @@ class CompactIndex::VersionsFile
     def gem_lines(gems)
       gems.reduce("") do |concat, entry|
         versions = entry[:versions]
-        number_and_plat = versions.map { |version| number_and_platform(version[:number], version[:platform]) }
-        concat << "#{entry[:name]} #{number_and_plat.join(',')} #{entry[:checksum]}\n"
-      end
-    end
-
-    def number_and_platform(number, platform)
-      if platform.nil? || platform == 'ruby'
-        number.dup
-      else
-        "#{number}-#{platform}"
+        concat << "#{entry[:name]} #{versions.map(&:number_and_platform).join(',')} #{entry[:checksum]}\n"
       end
     end
 
