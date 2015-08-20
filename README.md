@@ -41,38 +41,15 @@ from_date = @versions_file.updated_at
 
 # Query the extra gems using the from date. Format should be as follows
 extra_gems = [
-  {
-    name: "gem1",
-    versions: [
-      {
-        number: "0.9.8"
-        platform: "ruby"
-        checksum:  "abc123" #sha256 checksum available on rubygems.org
-      },
-      {
-        number: "0.9.9"
-        platform: "java"
-        checksum:  "abc123"
-      }
-    ]
-  },
-  {
-    name: "gem2",
-    versions: [
-      {
-        number: "0.9.8"
-        platform: "ruby"
-        checksum:  "abc123" #sha256 checksum available on rubygems.org
-      },
-      {
-        number: "0.9.9"
-        platform: "java"
-        checksum:  "abc123"
-      }
-    ]
-  }
+  CompactIndex::Gem.new("gem1", [
+    CompactIndex::GemVersion.new("0.9.8", "ruby", "abc123"),
+    CompactIndex::GemVersion.new("0.9.9", "jruby", "abc123"),
+  ]),
+  CompactIndex::Gem.new("gem2", [
+    CompactIndex::GemVersion.new("0.9.8", "ruby", "abc123"),
+    CompactIndex::GemVersion.new("0.9.9", "jruby", "abc123"),
+  ])
 ]
-
 
 # Render the body for the versions response
 CompactIndex.versions(@versions_file, extra_gems)
@@ -87,17 +64,10 @@ gem 'compact_index'
 
 # Expected versions format
 versions = [
-  {
-    number: '1.0.1',
-    checksum: "abc123",
-    dependencies: [
-      {
-        gem: 'foo',
-        version: '=1.0.1',
-        checksum: 'abc123'
-      }
-    ]
-  }
+  CompactIndex::GemVersion.new("1.0.1", "ruby", "abc123", "info123", [
+    CompactIndex::Dependency.new("foo", "=1.0.1", "abc123"),
+    CompactIndex::Dependency.new("bar", ">1.0, <2.0", "abc123"),
+  ])
 ]
 CompactIndex.info(versions)
 ```
