@@ -1,3 +1,7 @@
+require "compact_index/gem"
+require "compact_index/gem_version"
+require "compact_index/dependency"
+
 require "compact_index/version"
 require "compact_index/versions_file"
 
