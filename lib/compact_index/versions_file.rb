@@ -5,7 +5,7 @@ class CompactIndex::VersionsFile
     @path = file || "/versions.list"
   end
 
-  def contents(gems=nil, args = {})
+  def contents(gems = nil, args = {})
     if args[:calculate_checksums]
       gems = calculate_checksums(gems)
     end
