@@ -37,26 +37,26 @@ describe CompactIndex do
 
   describe '.info' do
     it "without dependencies" do
-      param = [ build_version(number: '1.0.1') ]
+      param = [ build_version("number" => '1.0.1') ]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc123\n")
     end
 
     it "multiple versions" do
       today = Time.now
       yesterday = Time.at(Time.now.to_i - 86400)
-      param = [ build_version(number: '1.0.1', checksum: 'abc1'), build_version(number: '1.0.2', checksum: 'abc2') ]
+      param = [ build_version("number" => '1.0.1', "checksum" => 'abc1'), build_version("number" => '1.0.2', "checksum" => 'abc2') ]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc1\n1.0.2 |checksum:abc2\n")
     end
 
     it "one dependency" do
-      param = [ build_version(number: '1.0.1', dependencies: [
+      param = [ build_version("number" => '1.0.1', "dependencies" => [
         CompactIndex::Dependency.new('foo', '=1.0.1', 'ruby', 'abc123')
       ])]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:=1.0.1|checksum:abc123\n")
     end
 
     it "multiple dependencies" do
-      param = [ build_version(number: '1.0.1', dependencies: [
+      param = [ build_version("number" => '1.0.1', "dependencies" => [
         CompactIndex::Dependency.new('foo1', '=1.0.1', 'ruby', 'abc123'),
         CompactIndex::Dependency.new('foo2', '<2.0', 'ruby', 'abc123'),
       ])]
@@ -64,14 +64,14 @@ describe CompactIndex do
     end
 
     it "dependency with multiple versions" do
-      param = [ build_version(number: '1.0.1', dependencies: [
+      param = [ build_version("number" => '1.0.1', "dependencies" => [
         CompactIndex::Dependency.new('foo', '>1.0, <2.0', 'ruby', 'abc123')
       ])]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:>1.0&<2.0|checksum:abc123\n")
     end
 
     it "dependencies have platform" do
-      param = [ build_version(number: '1.0.1', dependencies: [
+      param = [ build_version("number" => '1.0.1', "dependencies" => [
         CompactIndex::Dependency.new('a', '=1.1', 'jruby', 'abc123'),
         CompactIndex::Dependency.new('b', '=1.2', 'darwin-13', 'abc123'),
       ])]
@@ -79,22 +79,22 @@ describe CompactIndex do
     end
 
     it "show ruby required version" do
-      param = [ build_version(number: '1.0.1', ruby_version: '>1.8') ]
+      param = [ build_version("number" => '1.0.1', "ruby_version" => '>1.8') ]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc123,ruby:>1.8\n")
     end
 
     it "show rubygems required version" do
-      param = [ build_version(number: '1.0.1', rubygems_version: '=2.0') ]
+      param = [ build_version("number" => '1.0.1', "rubygem_version" => '=2.0') ]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc123,rubygems:=2.0\n")
     end
 
     it "show both rubygems and ruby required versions" do
-      param = [ build_version(number: '1.0.1', ruby_version: '>1.9', rubygems_version: '>2.0') ]
+      param = [ build_version("number" => '1.0.1', "ruby_version" => '>1.9', "rubygem_version" => '>2.0') ]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc123,ruby:>1.9,rubygems:>2.0\n")
     end
 
     it "adds platform next to version number" do
-      param = [ build_version(number: '1.0.1', platform: 'jruby') ]
+      param = [ build_version("number" => '1.0.1', "platform" => 'jruby') ]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1-jruby |checksum:abc123\n")
     end
   end
