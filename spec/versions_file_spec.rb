@@ -56,7 +56,7 @@ describe CompactIndex::VersionsFile do
 
         it "order gems by name" do
           file = Tempfile.new('versions-sort')
-          versions_file = CompactIndex::VersionsFile.new(file)
+          versions_file = CompactIndex::VersionsFile.new(file.path)
           gems = [
             CompactIndex::Gem.new("gem_b", [ build_version] ),
             CompactIndex::Gem.new("gem_a", [ build_version] )
@@ -67,18 +67,17 @@ describe CompactIndex::VersionsFile do
 
         it "order versions by number" do
           file = Tempfile.new('versions-sort')
-          versions_file = CompactIndex::VersionsFile.new(file)
+          versions_file = CompactIndex::VersionsFile.new(file.path)
           gems = [
             CompactIndex::Gem.new('test', [
               build_version(:number => "2.2"),
-              build_version(:number => "1.1.1-b"),
-              build_version(:number => "1.1.1-a"),
+              build_version(:number => "1.1.1"),
               build_version(:number => "1.1.1"),
               build_version(:number => "2.1.2")
             ])
           ]
           versions_file.update_with(gems)
-          expect(file.open.read).to match(/test 1.1.1-a,1.1.1-b,1.1.1,2.1.2,2.2 abc123/)
+          expect(file.open.read).to match(/test 1.1.1,1.1.1,2.1.2,2.2 abc123/)
         end
       end
 

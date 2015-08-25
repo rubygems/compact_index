@@ -1,3 +1,5 @@
+require 'time'
+require 'date'
 require 'compact_index'
 
 class CompactIndex::VersionsFile
@@ -67,7 +69,9 @@ class CompactIndex::VersionsFile
       # Sort gems by name and versions by number
       gems.sort! { |a,b| a[:name] <=> b[:name] }
       gems.each do |entry|
-        entry[:versions].sort_by! { |v| Gem::Version.create(v[:number]) }
+        entry[:versions].sort! do |a,b|
+          Gem::Version.create(a[:number]) <=> Gem::Version.create(b[:number])
+        end
       end
 
       gem_lines(gems)
