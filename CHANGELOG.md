@@ -1,3 +1,9 @@
+## 0.9.2 (August 22, 2015)
+
+Features:
+
+  - Parameters from versions are now optional
+
 ## 0.9.1 (August 19, 2015)
 
 Features:
