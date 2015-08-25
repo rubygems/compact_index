@@ -37,7 +37,7 @@ describe CompactIndex::VersionsFile do
 
 
     describe "#update_with" do
-      describe "when file do not exist"  do
+      describe "when file do not exist" do
         it "write the gems" do
           expected_file_output = /created_at: .*?\n---\ngem2 1.0.1,1.0.2-arch abc123\ngem5 1.0.1 abc123\n/
           versions_file.update_with(gems)

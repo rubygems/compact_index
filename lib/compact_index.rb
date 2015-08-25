@@ -22,29 +22,32 @@ module CompactIndex
     output
   end
 
+
   private
-    def self.version_line(version)
-      if version[:dependencies]
-        version[:dependencies]
-        deps = version[:dependencies].map do |d|
-          [
-             d[:gem],
-             d.version_and_platform.gsub(/, /, "&")
-          ].join(':')
-        end
-      else
-        deps = []
+
+
+  def self.version_line(version)
+    if version[:dependencies]
+      version[:dependencies]
+      deps = version[:dependencies].map do |d|
+        [
+           d[:gem],
+           d.version_and_platform.gsub(/, /, "&")
+        ].join(':')
       end
-
-      line = version.number_and_platform
-      line << " "
-      line << deps.join(",")
-      line << "|"
-
-      line << "checksum:#{version[:checksum]}"
-      line << ",ruby:#{version[:ruby_version]}" if version[:ruby_version]
-      line << ",rubygems:#{version[:rubygems_version]}" if version[:rubygems_version]
-
-      line
+    else
+      deps = []
     end
+
+    line = version.number_and_platform
+    line << " "
+    line << deps.join(",")
+    line << "|"
+
+    line << "checksum:#{version[:checksum]}"
+    line << ",ruby:#{version[:ruby_version]}" if version[:ruby_version]
+    line << ",rubygems:#{version[:rubygems_version]}" if version[:rubygems_version]
+
+    line
+  end
 end

@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["fotanus@gmail.com"]
   spec.email         = ["Felipe Tanus"]
 
-  spec.summary       = %q{Backend for compact index}
+  spec.summary       = "Backend for compact index"
   spec.homepage      = "https://github.com/bundler/compact_index"
   spec.license       = "MIT"
 

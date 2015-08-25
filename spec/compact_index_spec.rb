@@ -44,7 +44,10 @@ describe CompactIndex do
     it "multiple versions" do
       today = Time.now
       yesterday = Time.at(Time.now.to_i - 86400)
-      param = [ build_version(:number => '1.0.1', :checksum => 'abc1'), build_version(:number => '1.0.2', :checksum => 'abc2') ]
+      param = [
+        build_version(:number => '1.0.1', :checksum => 'abc1'),
+        build_version(:number => '1.0.2', :checksum => 'abc2')
+      ]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc1\n1.0.2 |checksum:abc2\n")
     end
 
