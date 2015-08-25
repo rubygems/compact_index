@@ -61,7 +61,7 @@ class CompactIndex::VersionsFile
 
       # Transform hash in a list of line informations to be printed
       gems = gems_hash.map do |gem, versions|
-        { "name" => gem, "versions" => versions, "checksum" => versions.first[:checksum] }
+        { :name => gem, :versions => versions, :checksum => versions.first[:checksum] }
       end
 
       # Sort gems by name and versions by number
@@ -76,9 +76,9 @@ class CompactIndex::VersionsFile
     def parse_gems(gems)
       gem_lines = gems.map do |entry|
         {
-          "name" => entry[:name],
-          "versions" => entry[:versions],
-          "checksum" => entry[:versions].first[:checksum]
+          :name => entry[:name],
+          :versions => entry[:versions],
+          :checksum => entry[:versions].first[:checksum]
         }
       end
       gem_lines(gem_lines)
