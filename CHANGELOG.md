@@ -1,3 +1,9 @@
+## 0.9.3 (August 25, 2015)
+
+Features:
+
+  - Support for ruby 1.8
+
 ## 0.9.2 (August 22, 2015)
 
 Features:
