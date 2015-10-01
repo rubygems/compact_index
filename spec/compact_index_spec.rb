@@ -68,9 +68,16 @@ describe CompactIndex do
 
     it "dependency with multiple versions" do
       param = [ build_version(:number => '1.0.1', :dependencies => [
+        CompactIndex::Dependency.new('foo', '<2.0, >1.0', 'ruby', 'abc123')
+      ])]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:<2.0&>1.0|checksum:abc123\n")
+    end
+
+    it "sorts the requirements" do
+      param = [ build_version(:number => '1.0.1', :dependencies => [
         CompactIndex::Dependency.new('foo', '>1.0, <2.0', 'ruby', 'abc123')
       ])]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:>1.0&<2.0|checksum:abc123\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:<2.0&>1.0|checksum:abc123\n")
     end
 
     it "dependencies have platform" do
