@@ -32,7 +32,7 @@ module CompactIndex
       deps = version[:dependencies].map do |d|
         [
            d[:gem],
-           d.version_and_platform.gsub(/, /, "&")
+           d.version_and_platform.split(', ').sort.join("&")
         ].join(':')
       end
     else
