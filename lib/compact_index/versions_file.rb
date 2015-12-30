@@ -34,7 +34,7 @@ class CompactIndex::VersionsFile
 
 
   def create(gems)
-    content = "created_at: #{Time.now.iso8601}"
+    content = "\Acreated_at: #{Time.now.iso8601}"
     content << "\n---\n"
     content << parse_gems_for_create(gems)
 
