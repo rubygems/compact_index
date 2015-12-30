@@ -18,11 +18,7 @@ class CompactIndex::VersionsFile
   end
 
   def updated_at
-    if File.exists? @path
-      DateTime.parse(File.mtime(@path).to_s)
-    else
-      Time.at(0)
-    end
+    created_at_header(@path) || Time.at(0).to_datetime
   end
 
   def update_with(gems)
@@ -101,4 +97,19 @@ class CompactIndex::VersionsFile
       gem[:versions].first[:checksum] = info_checksum
     end
   end
+
+  def created_at_header(path)
+    return unless File.exists? path
+
+    File.open(path) do |file|
+      file.each_line do |line|
+        if line.match(/created_at: (.*)\n|---\n/)
+          return match[1] && DateTime.parse(match[1])
+        end
+      end
+    end
+
+    nil
+  end
+
 end
