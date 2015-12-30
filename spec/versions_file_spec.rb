@@ -45,13 +45,13 @@ describe CompactIndex::VersionsFile do
         end
 
         it "add the date on top" do
-          date_regexp = /^created_at: (.*?)\n/
+          date_regexp = /\Acreated_at: (.*?)\n/
           versions_file.update_with(gems)
-          expect(
-            file.open.read.match(date_regexp)[0]
-          ).to match(
-            /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
-          )
+          file.open.read.match(date_regexp) do |m|
+            expect(m.first).to match(
+              /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
+            )
+          end
         end
 
         it "order gems by name" do
@@ -82,7 +82,7 @@ describe CompactIndex::VersionsFile do
       end
 
       describe "when file exists" do
-        before(:each) { versions_file.send('create',gems) }
+        before(:each) { versions_file.send('create', gems) }
 
         it "add a gem" do
           gems = [CompactIndex::Gem.new('new-gem', [build_version])]
@@ -102,12 +102,20 @@ describe CompactIndex::VersionsFile do
   end
 
   describe "#updated_at" do
-    it "is a date time" do
-      expect(versions_file.updated_at).to be_kind_of(DateTime)
+    it "is epoch start when file does not exist" do
+      expect(CompactIndex::VersionsFile.new("/tmp/doesntexist").updated_at).to eq(Time.at(0).to_datetime)
     end
-    it "uses File#mtime" do
-      expect(File).to receive('mtime') { DateTime.now }
-      versions_file.updated_at
+
+    it "is epoch when created_at header does not exist" do
+      expect(versions_file.updated_at).to eq(Time.at(0).to_datetime)
+    end
+
+    it "is the created_at time when the header exists" do
+      Tempfile.new("created_at_versions") do |tmp|
+        tmp.write("created_at: 2015-08-23T17:22:53-07:00\n---\ngem2 1.0.1\n")
+        file = CompactIndex::VersionsFile.new(tmp.path).updated_at
+        expect(file.updated_at).to eq(DateTime.parse("2015-08-23T17:22:53-07:00"))
+      end
     end
   end
 
