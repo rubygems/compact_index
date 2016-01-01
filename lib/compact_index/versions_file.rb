@@ -103,7 +103,7 @@ class CompactIndex::VersionsFile
 
     File.open(path) do |file|
       file.each_line do |line|
-        if line.match(/created_at: (.*)\n|---\n/)
+        line.match(/created_at: (.*)\n|---\n/) do |match|
           return match[1] && DateTime.parse(match[1])
         end
       end
