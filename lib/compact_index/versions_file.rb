@@ -59,7 +59,7 @@ class CompactIndex::VersionsFile
 
     # Transform hash in a list of line informations to be printed
     gems = gems_hash.map do |gem, versions|
-      { :name => gem, :versions => versions, :checksum => versions.first[:checksum] }
+      { :name => gem, :versions => versions, :checksum => versions.first[:info_checksum] }
     end
 
     # Sort gems by name and versions by number
@@ -78,7 +78,7 @@ class CompactIndex::VersionsFile
       {
         :name => entry[:name],
         :versions => entry[:versions],
-        :checksum => entry[:versions].first[:checksum]
+        :checksum => entry[:versions].first[:info_checksum]
       }
     end
     gem_lines(gem_lines)
@@ -94,7 +94,7 @@ class CompactIndex::VersionsFile
   def calculate_checksums(gems)
     gems.each do |gem|
       info_checksum = Digest::MD5.hexdigest(CompactIndex.info(gem[:versions]))
-      gem[:versions].first[:checksum] = info_checksum
+      gem[:versions].first[:info_checksum] = info_checksum
     end
   end
 
