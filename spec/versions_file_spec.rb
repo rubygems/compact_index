@@ -38,67 +38,47 @@ describe CompactIndex::VersionsFile do
     let(:versions_file) { versions_file = CompactIndex::VersionsFile.new(file.path) }
 
 
-    describe "#update_with" do
-      describe "when file do not exist" do
-        it "write the gems" do
-          expected_file_output = /created_at: .*?\n---\ngem2 1.0.1,1.0.2-arch abc123102\ngem5 1.0.1 abc123101\n/
-          versions_file.update_with(gems)
-          expect(file.open.read).to match(expected_file_output)
-        end
+    describe "#create" do
+      it "writes one line per gem" do
+        expected_file_output = /created_at: .*?\n---\ngem2 1.0.1,1.0.2-arch abc123102\ngem5 1.0.1 abc123101\n/
+        versions_file.create(gems)
+        expect(file.open.read).to match(expected_file_output)
+      end
 
-        it "add the date on top" do
-          date_regexp = /\Acreated_at: (.*?)\n/
-          versions_file.update_with(gems)
-          file.open.read.match(date_regexp) do |m|
-            expect(m[0]).to match(
-              /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
-            )
-          end
-        end
-
-        it "order gems by name" do
-          file = Tempfile.new('versions-sort')
-          versions_file = CompactIndex::VersionsFile.new(file.path)
-          gems = [
-            CompactIndex::Gem.new("gem_b", [build_version]),
-            CompactIndex::Gem.new("gem_a", [build_version])
-          ]
-          versions_file.update_with(gems)
-          expect(file.open.read).to match(/gem_a 1.0 abc12310\ngem_b 1.0/)
-        end
-
-        it "order versions by number" do
-          file = Tempfile.new('versions-sort')
-          versions_file = CompactIndex::VersionsFile.new(file.path)
-          gems = [
-            CompactIndex::Gem.new('test', [
-              build_version(:number => "2.2"),
-              build_version(:number => "1.1.1"),
-              build_version(:number => "1.1.1"),
-              build_version(:number => "2.1.2")
-            ])
-          ]
-          versions_file.update_with(gems)
-          expect(file.open.read).to match(/test 1.1.1,1.1.1,2.1.2,2.2 abc12322/)
+      it "adds the date on top" do
+        date_regexp = /\Acreated_at: (.*?)\n/
+        versions_file.create(gems)
+        file.open.read.match(date_regexp) do |m|
+          expect(m[0]).to match(
+            /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
+          )
         end
       end
 
-      describe "when file exists" do
-        before(:each) { versions_file.send('create', gems) }
+      it "orders gems by name" do
+        file = Tempfile.new('versions-sort')
+        versions_file = CompactIndex::VersionsFile.new(file.path)
+        gems = [
+          CompactIndex::Gem.new("gem_b", [build_version]),
+          CompactIndex::Gem.new("gem_a", [build_version])
+        ]
+        versions_file.create(gems)
+        expect(file.open.read).to match(/gem_a 1.0 abc12310\ngem_b 1.0/)
+      end
 
-        it "add a gem" do
-          gems = [CompactIndex::Gem.new('new-gem', [build_version])]
-          expected_output = "---\ngem2 1.0.1,1.0.2-arch abc123102\ngem5 1.0.1 abc123101\nnew-gem 1.0 abc12310\n"
-          versions_file.update_with(gems)
-          expect(file.open.read).to match(expected_output)
-        end
-
-        it "add again even if already listed" do
-          gems = [ CompactIndex::Gem.new('gem5', [ build_version(:number => "3.0") ]) ]
-          expected_output = "---\ngem2 1.0.1,1.0.2-arch abc123102\ngem5 1.0.1 abc123101\ngem5 3.0 abc12330\n"
-          versions_file.update_with(gems)
-          expect(file.open.read).to match(expected_output)
-        end
+      it "orders versions by number" do
+        file = Tempfile.new('versions-sort')
+        versions_file = CompactIndex::VersionsFile.new(file.path)
+        gems = [
+          CompactIndex::Gem.new('test', [
+            build_version(:number => "2.2"),
+            build_version(:number => "1.1.1"),
+            build_version(:number => "1.1.1"),
+            build_version(:number => "2.1.2")
+          ])
+        ]
+        versions_file.create(gems)
+        expect(file.open.read).to match(/test 1.1.1,1.1.1,2.1.2,2.2 abc12322/)
       end
     end
   end
@@ -126,7 +106,7 @@ describe CompactIndex::VersionsFile do
       expect(versions_file.contents).to eq(@file_contents)
     end
 
-    it "receive extra gems" do
+    it "includes extra gems if given" do
       extra_gems = [
         CompactIndex::Gem.new("gem3", [
           build_version(:number => "1.0.1"),
@@ -167,23 +147,20 @@ describe CompactIndex::VersionsFile do
     end
 
     describe "with calculate_info_checksums flag" do
-      context "passing dependencies as parameters" do
-        let(:gems) do
-          [
-            CompactIndex::Gem.new('test', [
-                build_version(:number => '1.0', :platform => 'ruby', :dependencies => [
-                  CompactIndex::Dependency.new('foo', '=1.0.1', 'ruby', 'abc123')
-                ])
-            ])
-          ]
-        end
-        it "calculates the info_checksums on the fly" do
-          expect(
-            versions_file.contents(gems, :calculate_checksums => true)
-          ).to match(
-            /test 1.0 a6beccb34e26aa9e082bda0d8fa4ee77/
-          )
-        end
+      let(:gems) {[
+        CompactIndex::Gem.new('test', [
+          build_version(:number => '1.0', :platform => 'ruby', :dependencies => [
+            CompactIndex::Dependency.new('foo', '=1.0.1', 'ruby', 'abc123')
+          ])
+        ])
+      ]}
+
+      it "calculates the info_checksums on the fly" do
+        expect(
+          versions_file.contents(gems, :calculate_checksums => true)
+        ).to match(
+          /test 1.0 a6beccb34e26aa9e082bda0d8fa4ee77/
+        )
       end
     end
   end
