@@ -10,6 +10,16 @@ module CompactIndex
       end
     end
 
+    def <=>(other)
+      number_comp = number <=> other.number
+
+      if number_comp.zero?
+        [number, platform] <=> [other.number, other.platform]
+      else
+        number_comp
+      end
+    end
+
     def to_line
       line = number_and_platform << " " << deps_line << "|checksum:#{checksum}"
       line << ",ruby:#{ruby_version}" if ruby_version && ruby_version != ">= 0"
