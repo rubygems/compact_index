@@ -85,9 +85,13 @@ class CompactIndex::VersionsFile
   end
 
   def gem_lines(gems)
-    gems.reduce("") do |concat, entry|
-      versions = entry[:versions]
-      concat << "#{entry[:name]} #{versions.map(&:number_and_platform).join(',')} #{entry[:checksum]}\n"
+    gems.each {|g| g.versions.sort! }
+
+    gems.reduce("") do |lines, gem|
+      version_numbers = gem.versions.map(&:number_and_platform).join(',')
+      lines << gem.name <<
+        " ".freeze << version_numbers <<
+        " #{gem.versions.last.info_checksum}\n"
     end
   end
 
