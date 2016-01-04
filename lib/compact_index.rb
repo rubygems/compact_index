@@ -69,38 +69,9 @@ module CompactIndex
   #   1.0.1 requirement:<2.0&>1.0|checksum:abc1
   #   1.0.2 requirement:<2.0&>1.0,requirement2:=1.1|checksum:abc2,ruby:>1.0,rubygems:>2.0
   #   ```
-  def self.info(params)
-    output = String.new("---\n")
-    params.each do |version|
-      output << version_line(version) << "\n"
+  def self.info(versions)
+    versions.inject("---\n") do |output, version|
+      output << version.to_line << "\n"
     end
-    output
-  end
-
-private
-
-  def self.version_line(version)
-    if version[:dependencies]
-      version[:dependencies]
-      deps = version[:dependencies].map do |d|
-        [
-          d[:gem],
-          d.version_and_platform.split(", ").sort.join("&")
-        ].join(":")
-      end
-    else
-      deps = []
-    end
-
-    line = version.number_and_platform.dup
-    line << " "
-    line << deps.join(",")
-    line << "|"
-
-    line << "checksum:#{version[:checksum]}"
-    line << ",ruby:#{version[:ruby_version]}" if version[:ruby_version]
-    line << ",rubygems:#{version[:rubygems_version]}" if version[:rubygems_version]
-
-    line
   end
 end
