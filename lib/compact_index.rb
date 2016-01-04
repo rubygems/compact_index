@@ -15,40 +15,10 @@ module CompactIndex
     versions_file.contents(gems, args)
   end
 
-  def self.info(params)
-    output = "---\n"
-    params.each do |version|
-      output << version_line(version) << "\n"
+  def self.info(versions)
+    versions.inject("---\n") do |output, version|
+      output << version.to_line << "\n"
     end
-    output
   end
 
-
-  private
-
-
-  def self.version_line(version)
-    if version[:dependencies]
-      version[:dependencies]
-      deps = version[:dependencies].map do |d|
-        [
-           d[:gem],
-           d.version_and_platform.split(', ').sort.join("&")
-        ].join(':')
-      end
-    else
-      deps = []
-    end
-
-    line = version.number_and_platform
-    line << " "
-    line << deps.join(",")
-    line << "|"
-
-    line << "checksum:#{version[:checksum]}"
-    line << ",ruby:#{version[:ruby_version]}" if version[:ruby_version]
-    line << ",rubygems:#{version[:rubygems_version]}" if version[:rubygems_version]
-
-    line
-  end
 end

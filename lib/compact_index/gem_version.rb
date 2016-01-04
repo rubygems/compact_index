@@ -8,5 +8,22 @@ module CompactIndex
         "#{number}-#{platform}"
       end
     end
+
+    def to_line
+      line = number_and_platform << " " << deps_line << "|checksum:#{checksum}"
+      line << ",ruby:#{ruby_version}" if ruby_version && ruby_version != ">= 0"
+      line << ",rubygems:#{rubygems_version}" if rubygems_version && rubygems_version != ">= 0"
+      line
+    end
+
+  private
+
+    def deps_line
+      return "" if dependencies.nil?
+      dependencies.map do |d|
+        [d[:gem], d.version_and_platform.split(", ").sort.join("&")].join(":")
+      end.join(",")
+    end
+
   end
 end
