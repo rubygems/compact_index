@@ -94,7 +94,7 @@ class CompactIndex::VersionsFile
   def calculate_checksums(gems)
     gems.each do |gem|
       info_checksum = Digest::MD5.hexdigest(CompactIndex.info(gem[:versions]))
-      gem[:versions].first[:info_checksum] = info_checksum
+      gem[:versions].last[:info_checksum] = info_checksum
     end
   end
 
