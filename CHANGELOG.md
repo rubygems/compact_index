@@ -1,3 +1,21 @@
+## 0.9.4 (January 5, 2016)
+
+Features:
+
+  - YARD documentation
+
+Bugfixes:
+
+  - Use versions.list header time instead of mtime
+
+
+
+## 0.9.3 (August 25, 2015)
+
+Features:
+
+  - Support for ruby 1.8
+
 ## 0.9.3 (August 25, 2015)
 
 Features:
