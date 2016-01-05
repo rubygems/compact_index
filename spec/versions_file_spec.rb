@@ -45,13 +45,10 @@ describe CompactIndex::VersionsFile do
         end
 
         it "add the date on top" do
-          date_regexp = /\Acreated_at: (.*?)\n/
+          now = Time.now
+          allow(Time).to receive(:now).and_return(now)
           versions_file.update_with(gems)
-          file.open.read.match(date_regexp) do |m|
-            expect(m.first).to match(
-              /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
-            )
-          end
+          expect(file.open.read).to start_with "created_at: #{now.iso8601}\n"
         end
 
         it "order gems by name" do
