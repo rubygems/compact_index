@@ -1,5 +1,6 @@
 require 'time'
 require 'date'
+require 'digest'
 require 'compact_index'
 
 class CompactIndex::VersionsFile
