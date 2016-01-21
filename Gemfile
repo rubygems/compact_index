@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 # Specify your gem's dependencies in compact_index.gemspec
 gemspec
@@ -9,5 +9,5 @@ group :documentation do
 end
 
 group :development do
-  gem 'rubocop', :install_if => lambda { RUBY_VERSION >= '1.9' }
+  gem "rubocop", :install_if => lambda { RUBY_VERSION >= "1.9" }
 end

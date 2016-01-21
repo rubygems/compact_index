@@ -1,6 +1,6 @@
 def build_version(args = {})
-    name = args.fetch(:name, 'test_gem')
-    number = args.fetch(:number, '1.0')
+    name = args.fetch(:name, "test_gem")
+    number = args.fetch(:number, "1.0")
     platform = args.fetch(:platform, nil)
     checksum = args.fetch(:checksum, "sum+#{name}+#{number}")
     info_checksum = args.fetch(:info_checksum, "info+#{name}+#{number}")

@@ -1,7 +1,7 @@
-require 'time'
-require 'date'
-require 'digest'
-require 'compact_index'
+require "time"
+require "date"
+require "digest"
+require "compact_index"
 
 class CompactIndex::VersionsFile
   def initialize(file = nil)
@@ -39,13 +39,13 @@ private
     content << "\n---\n"
     content << parse_gems_for_create(gems)
 
-    File.open(@path, 'w') do |io|
+    File.open(@path, "w") do |io|
       io.write content
     end
   end
 
   def update(gems)
-    File.open(@path, 'a') do |io|
+    File.open(@path, "a") do |io|
       io.write parse_gems(gems)
     end
   end
@@ -88,7 +88,7 @@ private
   def gem_lines(gems)
     gems.reduce("") do |concat, entry|
       versions = entry[:versions]
-      concat << "#{entry[:name]} #{versions.map(&:number_and_platform).join(',')} #{entry[:info_checksum]}\n"
+      concat << "#{entry[:name]} #{versions.map(&:number_and_platform).join(",")} #{entry[:info_checksum]}\n"
     end
   end
 
