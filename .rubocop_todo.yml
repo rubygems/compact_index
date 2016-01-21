@@ -41,13 +41,6 @@ Performance/RedundantMatch:
   Exclude:
     - 'lib/compact_index/versions_file.rb'
 
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: nested, compact
-Style/ClassAndModuleChildren:
-  Exclude:
-    - 'lib/compact_index/versions_file.rb'
-
 # Offense count: 3
 Style/Documentation:
   Exclude:
