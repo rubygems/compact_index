@@ -78,7 +78,7 @@ module CompactIndex
   end
 
 
-  private
+private
 
 
   def self.version_line(version)

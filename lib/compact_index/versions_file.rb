@@ -31,7 +31,7 @@ class CompactIndex::VersionsFile
   end
 
 
-  private
+private
 
 
   def create(gems)

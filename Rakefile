@@ -8,7 +8,14 @@ begin
     t.rspec_opts = %w(--color)
   end
 
-  task :default => :spec
+  begin
+    require 'rubocop/rake_task'
+    RuboCop::RakeTask.new
+  rescue LoadError
+    task :rubocop
+  end
+
+  task :default => [:rubocop, :spec]
 rescue LoadError => e
   # rspec won't exist on production
 end
