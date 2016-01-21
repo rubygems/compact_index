@@ -9,8 +9,8 @@ class CompactIndex::VersionsFile
   end
 
   def contents(gems = nil, args = {})
-    if args[:calculate_checksums]
-      gems = calculate_checksums(gems)
+    if args[:calculate_info_checksums]
+      gems = calculate_info_checksums(gems)
     end
 
     out = File.read(@path)
@@ -60,7 +60,7 @@ class CompactIndex::VersionsFile
 
     # Transform hash in a list of line informations to be printed
     gems = gems_hash.map do |gem, versions|
-      { :name => gem, :versions => versions, :checksum => versions.first[:checksum] }
+      { :name => gem, :versions => versions, :info_checksum => versions.last[:info_checksum] }
     end
 
     # Sort gems by name and versions by number
@@ -79,7 +79,7 @@ class CompactIndex::VersionsFile
       {
         :name => entry[:name],
         :versions => entry[:versions],
-        :checksum => entry[:versions].first[:checksum]
+        :info_checksum => entry[:versions].last[:info_checksum]
       }
     end
     gem_lines(gem_lines)
@@ -88,14 +88,14 @@ class CompactIndex::VersionsFile
   def gem_lines(gems)
     gems.reduce("") do |concat, entry|
       versions = entry[:versions]
-      concat << "#{entry[:name]} #{versions.map(&:number_and_platform).join(',')} #{entry[:checksum]}\n"
+      concat << "#{entry[:name]} #{versions.map(&:number_and_platform).join(',')} #{entry[:info_checksum]}\n"
     end
   end
 
-  def calculate_checksums(gems)
+  def calculate_info_checksums(gems)
     gems.each do |gem|
       info_checksum = Digest::MD5.hexdigest(CompactIndex.info(gem[:versions]))
-      gem[:versions].first[:checksum] = info_checksum
+      gem[:versions].last[:info_checksum] = info_checksum
     end
   end
 
