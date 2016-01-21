@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "time"
 require "date"
 require "digest"
@@ -33,7 +34,7 @@ class CompactIndex::VersionsFile
 private
 
   def create(gems)
-    content = "created_at: #{Time.now.iso8601}"
+    content = "created_at: #{Time.now.iso8601}".dup
     content << "\n---\n"
     content << parse_gems_for_create(gems)
 
@@ -84,7 +85,7 @@ private
   end
 
   def gem_lines(gems)
-    gems.reduce("") do |concat, entry|
+    gems.reduce("".dup) do |concat, entry|
       versions = entry[:versions]
       concat << "#{entry[:name]} #{versions.map(&:number_and_platform).join(",")} #{entry[:info_checksum]}\n"
     end
