@@ -41,21 +41,6 @@ Performance/RedundantMatch:
   Exclude:
     - 'lib/compact_index/versions_file.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles, IndentationWidth.
-# SupportedStyles: outdent, indent
-Style/AccessModifierIndentation:
-  EnforcedStyle: indent
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: with_first_parameter, with_fixed_indentation
-Style/AlignParameters:
-  Exclude:
-    - 'lib/compact_index/gem_version.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: nested, compact
@@ -79,13 +64,6 @@ Style/IfUnlessModifier:
   Exclude:
     - 'lib/compact_index/versions_file.rb'
 
-# Offense count: 25
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: special_inside_parentheses, consistent, align_brackets
-Style/IndentArray:
-  Enabled: false
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/MutableConstant:
@@ -96,11 +74,3 @@ Style/MutableConstant:
 # Cop supports --auto-correct.
 Style/NumericLiterals:
   MinDigits: 6
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-# SupportedStyles: comma, consistent_comma, no_comma
-Style/TrailingCommaInLiteral:
-  Exclude:
-    - 'spec/compact_index_spec.rb'

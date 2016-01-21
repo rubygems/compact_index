@@ -84,8 +84,8 @@ private
       version[:dependencies]
       deps = version[:dependencies].map do |d|
         [
-           d[:gem],
-           d.version_and_platform.split(", ").sort.join("&")
+          d[:gem],
+          d.version_and_platform.split(", ").sort.join("&")
         ].join(":")
       end
     else

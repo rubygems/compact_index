@@ -33,9 +33,9 @@ describe CompactIndex::VersionsFile do
       [
         CompactIndex::Gem.new("gem5", [build_version(:name => "gem5", :number => "1.0.1")]),
         CompactIndex::Gem.new("gem2", [
-          build_version(:name => "gem2", :number => "1.0.1"),
-          build_version(:name => "gem2", :number => "1.0.2", :platform => "arch")
-        ])
+                                build_version(:name => "gem2", :number => "1.0.1"),
+                                build_version(:name => "gem2", :number => "1.0.2", :platform => "arch")
+                              ])
       ]
     end
     let(:versions_file) { versions_file = CompactIndex::VersionsFile.new(file.path) }
@@ -79,12 +79,12 @@ gem_b 1.0 info+gem_b+1.0
           versions_file = CompactIndex::VersionsFile.new(file.path)
           gems = [
             CompactIndex::Gem.new("test", [
-              build_version(:name => "test", :number => "1.3.0"),
-              build_version(:name => "test", :number => "2.2"),
-              build_version(:name => "test", :number => "1.1.1"),
-              build_version(:name => "test", :number => "1.1.1"),
-              build_version(:name => "test", :number => "2.1.2")
-            ])
+                                    build_version(:name => "test", :number => "1.3.0"),
+                                    build_version(:name => "test", :number => "2.2"),
+                                    build_version(:name => "test", :number => "1.1.1"),
+                                    build_version(:name => "test", :number => "1.1.1"),
+                                    build_version(:name => "test", :number => "2.1.2")
+                                  ])
           ]
           versions_file.update_with(gems)
           expect(file.open.read).to include("test 1.1.1,1.1.1,1.3.0,2.1.2,2.2 info+test+2.1.2")
@@ -147,9 +147,9 @@ gem5 3.0 info+gem5+3.0
     it "receive extra gems" do
       extra_gems = [
         CompactIndex::Gem.new("gem3", [
-          build_version(:name => "gem3", :number => "1.0.1"),
-          build_version(:name => "gem3", :number => "1.0.2", :platform => "arch")
-        ])
+                                build_version(:name => "gem3", :number => "1.0.1"),
+                                build_version(:name => "gem3", :number => "1.0.2", :platform => "arch")
+                              ])
       ]
       expect(
         versions_file.contents(extra_gems)
@@ -161,8 +161,8 @@ gem5 3.0 info+gem5+3.0
     it "has info_checksum" do
       gems = [
         CompactIndex::Gem.new("test", [
-          build_version(:info_checksum => "testsum", :number => "1.0")
-        ])
+                                build_version(:info_checksum => "testsum", :number => "1.0")
+                              ])
       ]
       expect(
         versions_file.contents(gems)
@@ -174,8 +174,8 @@ gem5 3.0 info+gem5+3.0
     it "has the platform" do
       gems = [
         CompactIndex::Gem.new("test", [
-          build_version(:name => "test", :number => "1.0", :platform => "jruby")
-        ])
+                                build_version(:name => "test", :number => "1.0", :platform => "jruby")
+                              ])
       ]
       expect(
         versions_file.contents(gems)
@@ -189,10 +189,11 @@ gem5 3.0 info+gem5+3.0
         let(:gems) do
           [
             CompactIndex::Gem.new("test", [
-                build_version(:info_checksum => nil, :number => "1.0", :platform => "ruby", :dependencies => [
-                  CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123")
-                ])
-            ])
+                                    build_version(:info_checksum => nil, :number => "1.0",
+                                                  :platform => "ruby", :dependencies => [
+                                                    CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123")
+                                                  ])
+                                  ])
           ]
         end
         it "calculates the info_checksums on the fly" do
