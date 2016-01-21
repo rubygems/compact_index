@@ -23,7 +23,7 @@ class CompactIndex::VersionsFile
   end
 
   def update_with(gems)
-    if File.exists?(@path) && !File.zero?(@path)
+    if File.exist?(@path) && !File.zero?(@path)
       update(gems)
     else
       create(gems)
@@ -98,7 +98,7 @@ private
   end
 
   def created_at_header(path)
-    return unless File.exists? path
+    return unless File.exist? path
 
     File.open(path) do |file|
       file.each_line do |line|
