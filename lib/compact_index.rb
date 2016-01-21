@@ -48,7 +48,6 @@ module CompactIndex
     versions_file.contents(gems, args)
   end
 
-
   # Formats the versions information of a gem, to be display in the `/info/gemname` endpoint.
   #
   # @param versions_file [CompactIndex::VersionsFile] which will be used as a base response
@@ -77,9 +76,7 @@ module CompactIndex
     output
   end
 
-
 private
-
 
   def self.version_line(version)
     if version[:dependencies]

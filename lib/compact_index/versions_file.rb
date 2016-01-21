@@ -30,9 +30,7 @@ class CompactIndex::VersionsFile
     end
   end
 
-
 private
-
 
   def create(gems)
     content = "created_at: #{Time.now.iso8601}"
@@ -64,9 +62,9 @@ private
     end
 
     # Sort gems by name and versions by number
-    gems.sort! { |a,b| a[:name] <=> b[:name] }
+    gems.sort! {|a, b| a[:name] <=> b[:name] }
     gems.each do |entry|
-      entry[:versions].sort! do |a,b|
+      entry[:versions].sort! do |a, b|
         Gem::Version.create(a[:number]) <=> Gem::Version.create(b[:number])
       end
     end
@@ -112,5 +110,4 @@ private
 
     nil
   end
-
 end

@@ -29,16 +29,15 @@ describe CompactIndex::VersionsFile do
   context "using the file" do
     let(:file) { Tempfile.new("create_versions.list") }
     let(:gems) do
-        [
-          CompactIndex::Gem.new("gem5", [ build_version(:name => "gem5", :number => "1.0.1") ]),
-          CompactIndex::Gem.new("gem2", [
-            build_version(:name => "gem2", :number => "1.0.1"),
-            build_version(:name => "gem2", :number => "1.0.2", :platform => "arch")
-          ])
-        ]
+      [
+        CompactIndex::Gem.new("gem5", [build_version(:name => "gem5", :number => "1.0.1")]),
+        CompactIndex::Gem.new("gem2", [
+          build_version(:name => "gem2", :number => "1.0.1"),
+          build_version(:name => "gem2", :number => "1.0.2", :platform => "arch")
+        ])
+      ]
     end
     let(:versions_file) { versions_file = CompactIndex::VersionsFile.new(file.path) }
-
 
     describe "#update_with" do
       describe "when file do not exist" do
@@ -62,8 +61,8 @@ gem5 1.0.1 info+gem5+1.0.1
           file = Tempfile.new("versions-sort")
           versions_file = CompactIndex::VersionsFile.new(file.path)
           gems = [
-            CompactIndex::Gem.new("gem_b", [ build_version(:name => "gem_b") ] ),
-            CompactIndex::Gem.new("gem_a", [ build_version(:name => "gem_a") ] )
+            CompactIndex::Gem.new("gem_b", [build_version(:name => "gem_b")]),
+            CompactIndex::Gem.new("gem_a", [build_version(:name => "gem_a")])
           ]
           versions_file.update_with(gems)
           expect(file.open.read).to eq(<<-EOS)
@@ -107,7 +106,7 @@ new-gem 1.0 info+new-gem+1.0
         end
 
         it "add again even if already listed" do
-          gems = [ CompactIndex::Gem.new("gem5", [ build_version(:name => "gem5", :number => "3.0") ]) ]
+          gems = [CompactIndex::Gem.new("gem5", [build_version(:name => "gem5", :number => "3.0")])]
           expected_output = <<-EOS
 ---
 gem2 1.0.1,1.0.2-arch info+gem2+1.0.2

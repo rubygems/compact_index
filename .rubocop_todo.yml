@@ -78,22 +78,6 @@ Style/Documentation:
     - 'lib/compact_index/ext/date.rb'
     - 'lib/compact_index/versions_file.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-Style/EmptyLines:
-  Exclude:
-    - 'lib/compact_index.rb'
-    - 'lib/compact_index/versions_file.rb'
-    - 'spec/versions_file_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, no_empty_lines
-Style/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'lib/compact_index/versions_file.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -116,14 +100,6 @@ Style/IfUnlessModifier:
 Style/IndentArray:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: Width.
-Style/IndentationWidth:
-  Exclude:
-    - 'spec/support/versions.rb'
-    - 'spec/versions_file_spec.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/MutableConstant:
@@ -137,57 +113,8 @@ Style/NumericLiterals:
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Style/SpaceAfterComma:
-  Exclude:
-    - 'lib/compact_index/versions_file.rb'
-
-# Offense count: 60
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Style/SpaceAroundOperators:
-  Exclude:
-    - 'db/migrations/01_rubygems_org_schema_dump.rb'
-    - 'db/migrations/02_prune.rb'
-    - 'db/migrations/03_add_ruby_and_rubygems_requirements.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-# SupportedStyles: space, no_space
-Style/SpaceInsideBlockBraces:
-  Enabled: false
-
-# Offense count: 23
-# Cop supports --auto-correct.
-Style/SpaceInsideBrackets:
-  Exclude:
-    - 'spec/compact_index_spec.rb'
-    - 'spec/versions_file_spec.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/SpaceInsideParens:
-  Exclude:
-    - 'spec/versions_file_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: final_newline, final_blank_line
-Style/TrailingBlankLines:
-  Exclude:
-    - 'lib/compact_index/ext/date.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
 # SupportedStyles: comma, consistent_comma, no_comma
 Style/TrailingCommaInLiteral:
   Exclude:
     - 'spec/compact_index_spec.rb'
-
-# Offense count: 7
-# Cop supports --auto-correct.
-Style/TrailingWhitespace:
-  Exclude:
-    - 'db/migrations/01_rubygems_org_schema_dump.rb'
