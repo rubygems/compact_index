@@ -11,9 +11,7 @@ module CompactIndex
     end
 
     def contents(gems = nil, args = {})
-      if args[:calculate_info_checksums]
-        gems = calculate_info_checksums(gems)
-      end
+      gems = calculate_info_checksums(gems) if args[:calculate_info_checksums]
 
       out = File.read(@path)
       out << parse_gems(gems) if gems
