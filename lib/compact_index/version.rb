@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 module CompactIndex
-  VERSION = "0.9.4"
+  VERSION = "0.9.4".freeze
 end
