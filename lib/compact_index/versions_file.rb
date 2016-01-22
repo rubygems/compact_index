@@ -11,7 +11,9 @@ module CompactIndex
     end
 
     def contents(gems = nil, args = {})
-      gems = calculate_info_checksums(gems) if args[:calculate_info_checksums]
+      gems = calculate_info_checksums(gems) if args.delete(:calculate_info_checksums) { false }
+
+      raise ArgumentError, "Unknown options: #{args.keys.join(", ")}" unless args.empty?
 
       out = File.read(@path)
       out << parse_gems(gems) if gems
