@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "date"
 
 # Ruby 1.8.7 makes Time#to_datetime private, but we need it

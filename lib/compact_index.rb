@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "compact_index/gem"
 require "compact_index/gem_version"
 require "compact_index/dependency"
@@ -17,7 +18,7 @@ module CompactIndex
   #   other-gem
   #   ```
   def self.names(gem_names)
-    "---\n" << gem_names.join("\n") << "\n"
+    String.new("---\n") << gem_names.join("\n") << "\n"
   end
 
   # Returns the versions file content argumented with some extra gems
@@ -48,7 +49,6 @@ module CompactIndex
     versions_file.contents(gems, args)
   end
 
-
   # Formats the versions information of a gem, to be display in the `/info/gemname` endpoint.
   #
   # @param versions_file [CompactIndex::VersionsFile] which will be used as a base response
@@ -70,31 +70,29 @@ module CompactIndex
   #   1.0.2 requirement:<2.0&>1.0,requirement2:=1.1|checksum:abc2,ruby:>1.0,rubygems:>2.0
   #   ```
   def self.info(params)
-    output = "---\n"
+    output = String.new("---\n")
     params.each do |version|
       output << version_line(version) << "\n"
     end
     output
   end
 
-
-  private
-
+private
 
   def self.version_line(version)
     if version[:dependencies]
       version[:dependencies]
       deps = version[:dependencies].map do |d|
         [
-           d[:gem],
-           d.version_and_platform.split(', ').sort.join("&")
-        ].join(':')
+          d[:gem],
+          d.version_and_platform.split(", ").sort.join("&")
+        ].join(":")
       end
     else
       deps = []
     end
 
-    line = version.number_and_platform
+    line = version.number_and_platform.dup
     line << " "
     line << deps.join(",")
     line << "|"

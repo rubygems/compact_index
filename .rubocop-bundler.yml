@@ -46,11 +46,6 @@ Style/StringLiterals:
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
 
-# Having these make it easier to *not* forget to add one when adding a new
-# value and you can simply copy the previous line.
-Style/TrailingComma:
-  EnforcedStyleForMultiline: comma
-
 # 1.8.7 support
 
 Style/HashSyntax:
@@ -66,9 +61,6 @@ Style/EachWithObject:
   Enabled: false
 
 Style/SpecialGlobalVars:
-  Enabled: false
-
-Style/TrailingComma:
   Enabled: false
 
 # Metrics
