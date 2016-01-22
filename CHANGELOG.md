@@ -1,3 +1,13 @@
+## 0.10.0 (January 22, 2016)
+
+Features:
+
+  - Frozen string literal support
+
+Bugfixes:
+
+  - Use the last info checksum, rather than the first
+
 ## 0.9.4 (January 5, 2016)
 
 Features:
