@@ -140,6 +140,10 @@ gem5 3.0 info+gem5+3.0
   end
 
   describe "#contents" do
+    it "raises when there are unknown options" do
+      expect { versions_file.contents(nil, :foo => :bar) }.to raise_error(ArgumentError)
+    end
+
     it "return the file" do
       expect(versions_file.contents).to eq(@file_contents)
     end
