@@ -58,7 +58,7 @@ gem5 1.0.1 info+gem5+1.0.1
       end
 
       it "orders gems by name" do
-        file = Tempfile.new('versions-sort')
+        file = Tempfile.new("versions-sort")
         versions_file = CompactIndex::VersionsFile.new(file.path)
         gems = [
           CompactIndex::Gem.new("gem_b", [build_version]),
@@ -74,16 +74,17 @@ gem_b 1.0 info+test_gem+1.0
       end
 
       it "orders versions by number" do
-        file = Tempfile.new('versions-sort')
+        file = Tempfile.new("versions-sort")
         versions_file = CompactIndex::VersionsFile.new(file.path)
         gems = [
-          CompactIndex::Gem.new('test', [
-            build_version(:number => "1.3.0"),
-            build_version(:number => "2.2"),
-            build_version(:number => "1.1.1"),
-            build_version(:number => "1.1.1"),
-            build_version(:number => "2.1.2")
-          ])
+          CompactIndex::Gem.new("test",
+            [
+              build_version(:number => "1.3.0"),
+              build_version(:number => "2.2"),
+              build_version(:number => "1.1.1"),
+              build_version(:number => "1.1.1"),
+              build_version(:number => "2.1.2")
+            ])
         ]
         versions_file.create(gems)
         expect(file.open.read).to include("test 1.1.1,1.1.1,1.3.0,2.1.2,2.2 info+test_gem+2.2")
@@ -159,13 +160,17 @@ gem_b 1.0 info+test_gem+1.0
     end
 
     describe "with calculate_info_checksums flag" do
-      let(:gems) {[
-        CompactIndex::Gem.new('test', [
-          build_version(:number => '1.0', :platform => 'ruby', :dependencies => [
-            CompactIndex::Dependency.new('foo', '=1.0.1', 'ruby', 'abc123')
-          ])
-        ])
-      ]}
+      let(:gems) do
+        [
+          CompactIndex::Gem.new("test",
+            [
+              build_version(:number => "1.0", :platform => "ruby", :dependencies =>
+                [
+                  CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123")
+                ])
+            ])
+        ]
+      end
 
       it "calculates the info_checksums on the fly" do
         expect(

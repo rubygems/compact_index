@@ -35,6 +35,5 @@ module CompactIndex
         [d[:gem], d.version_and_platform.split(", ").sort.join("&")].join(":")
       end.join(",")
     end
-
   end
 end
