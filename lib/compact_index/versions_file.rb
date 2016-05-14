@@ -30,18 +30,20 @@ module CompactIndex
       File.open(@path, 'w') do |io|
         io.write "created_at: #{Time.now.iso8601}\n---\n"
         io.write gem_lines(gems)
+      end
     end
 
 private
 
-  def gem_lines(gems)
-    gems.each {|g| g.versions.sort! }
+    def gem_lines(gems)
+      gems.each {|g| g.versions.sort! }
 
-    gems.reduce("") do |lines, gem|
-      version_numbers = gem.versions.map(&:number_and_platform).join(',')
-      lines << gem.name <<
-        " ".freeze << version_numbers <<
-        " #{gem.versions.last.info_checksum}\n"
+      gems.reduce("".dup) do |lines, gem|
+        version_numbers = gem.versions.map(&:number_and_platform).join(",")
+        lines << gem.name <<
+          " ".freeze << version_numbers <<
+          " #{gem.versions.last.info_checksum}\n"
+      end
     end
 
     def calculate_info_checksums(gems)

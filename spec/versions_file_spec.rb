@@ -42,19 +42,19 @@ describe CompactIndex::VersionsFile do
 
     describe "#create" do
       it "writes one line per gem" do
-        expected_file_output = /created_at: .*?\n---\ngem2 1.0.1,1.0.2-arch abc123102\ngem5 1.0.1 abc123101\n/
+        expected_file_output = <<-EOS
+created_at: #{now.iso8601}
+---
+gem2 1.0.1,1.0.2-arch info+gem2+1.0.2
+gem5 1.0.1 info+gem5+1.0.1
+        EOS
         versions_file.create(gems)
-        expect(file.open.read).to match(expected_file_output)
+        expect(file.open.read).to eq(expected_file_output)
       end
 
       it "adds the date on top" do
-        date_regexp = /\Acreated_at: (.*?)\n/
         versions_file.create(gems)
-        file.open.read.match(date_regexp) do |m|
-          expect(m[0]).to match(
-            /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/
-          )
-        end
+        expect(file.open.read).to start_with "created_at: #{now.iso8601}\n"
       end
 
       it "orders gems by name" do
@@ -65,7 +65,12 @@ describe CompactIndex::VersionsFile do
           CompactIndex::Gem.new("gem_a", [build_version])
         ]
         versions_file.create(gems)
-        expect(file.open.read).to match(/gem_a 1.0 abc12310\ngem_b 1.0/)
+        expect(file.open.read).to eq(<<-EOS)
+created_at: #{now.iso8601}
+---
+gem_a 1.0 info+test_gem+1.0
+gem_b 1.0 info+test_gem+1.0
+      EOS
       end
 
       it "orders versions by number" do
@@ -73,6 +78,7 @@ describe CompactIndex::VersionsFile do
         versions_file = CompactIndex::VersionsFile.new(file.path)
         gems = [
           CompactIndex::Gem.new('test', [
+            build_version(:number => "1.3.0"),
             build_version(:number => "2.2"),
             build_version(:number => "1.1.1"),
             build_version(:number => "1.1.1"),
@@ -80,7 +86,7 @@ describe CompactIndex::VersionsFile do
           ])
         ]
         versions_file.create(gems)
-        expect(file.open.read).to match(/test 1.1.1,1.1.1,2.1.2,2.2 abc12322/)
+        expect(file.open.read).to include("test 1.1.1,1.1.1,1.3.0,2.1.2,2.2 info+test_gem+2.2")
       end
     end
   end
@@ -163,9 +169,9 @@ describe CompactIndex::VersionsFile do
 
       it "calculates the info_checksums on the fly" do
         expect(
-          versions_file.contents(gems, :calculate_checksums => true)
+          versions_file.contents(gems, :calculate_info_checksums => true)
         ).to match(
-          /test 1.0 a6beccb34e26aa9e082bda0d8fa4ee77/
+          /test 1.0 b1c5ae823c07dba64028e4b37a2a2ba7/
         )
       end
     end

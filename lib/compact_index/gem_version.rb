@@ -21,7 +21,7 @@ module CompactIndex
     end
 
     def to_line
-      line = number_and_platform << " " << deps_line << "|checksum:#{checksum}"
+      line = number_and_platform.dup << " " << deps_line << "|checksum:#{checksum}"
       line << ",ruby:#{ruby_version}" if ruby_version && ruby_version != ">= 0"
       line << ",rubygems:#{rubygems_version}" if rubygems_version && rubygems_version != ">= 0"
       line

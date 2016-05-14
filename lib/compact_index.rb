@@ -70,7 +70,7 @@ module CompactIndex
   #   1.0.2 requirement:<2.0&>1.0,requirement2:=1.1|checksum:abc2,ruby:>1.0,rubygems:>2.0
   #   ```
   def self.info(versions)
-    versions.inject("---\n") do |output, version|
+    versions.inject("---\n".dup) do |output, version|
       output << version.to_line << "\n"
     end
   end
