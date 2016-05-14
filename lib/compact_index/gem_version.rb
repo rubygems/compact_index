@@ -14,7 +14,7 @@ module CompactIndex
       number_comp = number <=> other.number
 
       if number_comp.zero?
-        [number, platform] <=> [other.number, other.platform]
+        [number, platform].compact <=> [other.number, other.platform].compact
       else
         number_comp
       end
