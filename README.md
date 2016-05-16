@@ -20,7 +20,7 @@ And then execute:
 
 ### `/names`
 
-To render the body for this call, all you have to do is generate a list of gems available in alfabetical order and use call `CompactIndex.names`.
+To render the body for this call, all you have to do is generate a list of gems available in alphabetical order and use call `CompactIndex.names`.
 
 ```ruby
 gem 'compact_index'
@@ -37,7 +37,7 @@ gem 'compact_index'
 versions_file = CompactIndex::VersionsFile.new("/path/to/versions/file")
 
 # Get last updated date. This is used to discover what gems aren't  in the file yet
-from_date = @versions_file.updated_at
+from_date = versions_file.updated_at
 
 # Query the extra gems using the from date. Format should be as follows
 extra_gems = [
@@ -52,7 +52,7 @@ extra_gems = [
 ]
 
 # Render the body for the versions response
-CompactIndex.versions(@versions_file, extra_gems)
+CompactIndex.versions(versions_file, extra_gems)
 ```
 
 ### `/info/gem_name`
