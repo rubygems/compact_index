@@ -2,6 +2,13 @@
 
 Features:
 
+  - Refactoring big part of the code
+  - Change behavior of VersionsFile#create to avoid adding multiple versions per line
+
+## 0.10.0 (January 22, 2016)
+
+Features:
+
   - Frozen string literal support
 
 Bugfixes:
