@@ -10,5 +10,5 @@ group :documentation do
 end
 
 group :development do
-  gem "rubocop", :install_if => lambda { RUBY_VERSION >= "1.9" }
+  gem "rubocop", :install_if => lambda { RUBY_VERSION >= "2.0" }
 end
