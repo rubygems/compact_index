@@ -36,8 +36,6 @@ module CompactIndex
   private
 
     def gem_lines(gems)
-      gems.each {|g| g.versions.sort! }
-
       gems.reduce("".dup) do |lines, gem|
         version_numbers = gem.versions.map(&:number_and_platform).join(",")
         lines << gem.name <<

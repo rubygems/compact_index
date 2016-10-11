@@ -73,7 +73,7 @@ gem_b 1.0 info+test_gem+1.0
       EOS
       end
 
-      it "orders versions by number" do
+      it "uses the given version order" do
         file = Tempfile.new("versions-sort")
         versions_file = CompactIndex::VersionsFile.new(file.path)
         gems = [
@@ -87,7 +87,7 @@ gem_b 1.0 info+test_gem+1.0
             ])
         ]
         versions_file.create(gems)
-        expect(file.open.read).to include("test 1.1.1,1.1.1,1.3.0,2.1.2,2.2 info+test_gem+2.2")
+        expect(file.open.read).to include("test 1.3.0,2.2,1.1.1,1.1.1,2.1.2 info+test_gem+2.1.2")
       end
     end
   end
