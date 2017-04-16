@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "compact_index/gem"
 require "compact_index/gem_version"
 require "compact_index/dependency"

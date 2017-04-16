@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "time"
 require "date"
 require "digest"

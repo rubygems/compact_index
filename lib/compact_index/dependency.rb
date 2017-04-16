@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module CompactIndex
   Dependency = Struct.new(:gem, :version, :platform, :checksum) do
     def version_and_platform

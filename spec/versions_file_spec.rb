@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "tempfile"
 require "spec_helper"
 require "compact_index/versions_file"
@@ -34,12 +35,13 @@ describe CompactIndex::VersionsFile do
         CompactIndex::Gem.new("gem5", [build_version(:name => "gem5", :number => "1.0.1")]),
         CompactIndex::Gem.new("gem2", [
                                 build_version(:name => "gem2", :number => "1.0.1"),
-                                build_version(:name => "gem2", :number => "1.0.2", :platform => "arch")
-                              ])
+                                build_version(:name => "gem2", :number => "1.0.2", :platform => "arch"),
+                              ]),
       ]
     end
     let(:versions_file) { versions_file = CompactIndex::VersionsFile.new(file.path) }
 
+    # rubocop:disable Style/IndentHeredoc
     describe "#create" do
       it "writes one line per gem" do
         expected_file_output = <<-EOS
@@ -62,7 +64,7 @@ gem5 1.0.1 info+gem5+1.0.1
         versions_file = CompactIndex::VersionsFile.new(file.path)
         gems = [
           CompactIndex::Gem.new("gem_b", [build_version]),
-          CompactIndex::Gem.new("gem_a", [build_version])
+          CompactIndex::Gem.new("gem_a", [build_version]),
         ]
         versions_file.create(gems)
         expect(file.open.read).to eq(<<-EOS)
@@ -83,8 +85,8 @@ gem_b 1.0 info+test_gem+1.0
               build_version(:number => "2.2"),
               build_version(:number => "1.1.1"),
               build_version(:number => "1.1.1"),
-              build_version(:number => "2.1.2")
-            ])
+              build_version(:number => "2.1.2"),
+            ]),
         ]
         versions_file.create(gems)
         expect(file.open.read).to include("test 1.3.0,2.2,1.1.1,1.1.1,2.1.2 info+test_gem+2.1.2")
@@ -123,8 +125,8 @@ gem_b 1.0 info+test_gem+1.0
       extra_gems = [
         CompactIndex::Gem.new("gem3", [
                                 build_version(:name => "gem3", :number => "1.0.1"),
-                                build_version(:name => "gem3", :number => "1.0.2", :platform => "arch")
-                              ])
+                                build_version(:name => "gem3", :number => "1.0.2", :platform => "arch"),
+                              ]),
       ]
       expect(
         versions_file.contents(extra_gems)
@@ -136,8 +138,8 @@ gem_b 1.0 info+test_gem+1.0
     it "has info_checksum" do
       gems = [
         CompactIndex::Gem.new("test", [
-                                build_version(:info_checksum => "testsum", :number => "1.0")
-                              ])
+                                build_version(:info_checksum => "testsum", :number => "1.0"),
+                              ]),
       ]
       expect(
         versions_file.contents(gems)
@@ -149,8 +151,8 @@ gem_b 1.0 info+test_gem+1.0
     it "has the platform" do
       gems = [
         CompactIndex::Gem.new("test", [
-                                build_version(:name => "test", :number => "1.0", :platform => "jruby")
-                              ])
+                                build_version(:name => "test", :number => "1.0", :platform => "jruby"),
+                              ]),
       ]
       expect(
         versions_file.contents(gems)
@@ -166,9 +168,9 @@ gem_b 1.0 info+test_gem+1.0
             [
               build_version(:number => "1.0", :platform => "ruby", :dependencies =>
                 [
-                  CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123")
-                ])
-            ])
+                  CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123"),
+                ]),
+            ]),
         ]
       end
 

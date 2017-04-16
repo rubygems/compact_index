@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Sequel.migration do
   change do
     create_table(:dependencies, :ignore_index_errors => true) do
