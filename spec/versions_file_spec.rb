@@ -39,7 +39,7 @@ describe CompactIndex::VersionsFile do
                               ]),
       ]
     end
-    let(:versions_file) { versions_file = CompactIndex::VersionsFile.new(file.path) }
+    let(:versions_file) { CompactIndex::VersionsFile.new(file.path) }
 
     # rubocop:disable Style/IndentHeredoc
     describe "#create" do

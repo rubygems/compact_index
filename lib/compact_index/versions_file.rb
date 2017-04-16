@@ -3,7 +3,6 @@
 require "time"
 require "date"
 require "digest"
-require "compact_index"
 
 module CompactIndex
   class VersionsFile
