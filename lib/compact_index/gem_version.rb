@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module CompactIndex
+  # rubocop:disable Metrics/BlockLength
   GemVersion = Struct.new(:number, :platform, :checksum, :info_checksum,
     :dependencies, :ruby_version, :rubygems_version) do
     def number_and_platform
