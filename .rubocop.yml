@@ -1,4 +1,9 @@
 inherit_from: .rubocop-bundler.yml
 
+Metrics/BlockLength:
+  Exclude:
+    - "db/migrations/*.rb"
+    - "spec/**/*.rb"
+
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
