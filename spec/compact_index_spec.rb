@@ -43,8 +43,6 @@ describe CompactIndex do
     end
 
     it "multiple versions" do
-      today = Time.now
-      yesterday = Time.at(Time.now.to_i - 86_400)
       param = [
         build_version(:number => "1.0.1", :checksum => "abc1"),
         build_version(:number => "1.0.2", :checksum => "abc2")

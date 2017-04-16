@@ -38,7 +38,7 @@ describe CompactIndex::VersionsFile do
                               ])
       ]
     end
-    let(:versions_file) { versions_file = CompactIndex::VersionsFile.new(file.path) }
+    let(:versions_file) { CompactIndex::VersionsFile.new(file.path) }
 
     describe "#create" do
       it "writes one line per gem" do
