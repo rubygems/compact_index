@@ -69,7 +69,7 @@ Sequel.migration do
       index [:position], :name => :index_versions_on_position
       index [:prerelease], :name => :index_versions_on_prerelease
       index [:rubygem_id], :name => :index_versions_on_rubygem_id
-      index %i[rubygem_id number platform],
+      index [:rubygem_id, :number, :platform],
         :name => :index_versions_on_rubygem_id_and_number_and_platform,
         :unique => true
     end
