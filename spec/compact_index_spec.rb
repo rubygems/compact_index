@@ -48,14 +48,14 @@ describe CompactIndex do
       yesterday = Time.at(Time.now.to_i - 86_400)
       param = [
         build_version(:number => "1.0.1", :checksum => "abc1"),
-        build_version(:number => "1.0.2", :checksum => "abc2")
+        build_version(:number => "1.0.2", :checksum => "abc2"),
       ]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:abc1\n1.0.2 |checksum:abc2\n")
     end
 
     it "one dependency" do
       param = [build_version(:number => "1.0.1", :dependencies => [
-                               CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123")
+                               CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123"),
                              ])]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:=1.0.1|checksum:sum+test_gem+1.0.1\n")
     end
@@ -63,21 +63,21 @@ describe CompactIndex do
     it "multiple dependencies" do
       param = [build_version(:number => "1.0.1", :dependencies => [
                                CompactIndex::Dependency.new("foo1", "=1.0.1", "ruby", "abc123"),
-                               CompactIndex::Dependency.new("foo2", "<2.0", "ruby", "abc123")
+                               CompactIndex::Dependency.new("foo2", "<2.0", "ruby", "abc123"),
                              ])]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo1:=1.0.1,foo2:<2.0|checksum:sum+test_gem+1.0.1\n")
     end
 
     it "dependency with multiple versions" do
       param = [build_version(:number => "1.0.1", :dependencies => [
-                               CompactIndex::Dependency.new("foo", "<2.0, >1.0", "ruby", "abc123")
+                               CompactIndex::Dependency.new("foo", "<2.0, >1.0", "ruby", "abc123"),
                              ])]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:<2.0&>1.0|checksum:sum+test_gem+1.0.1\n")
     end
 
     it "sorts the requirements" do
       param = [build_version(:number => "1.0.1", :dependencies => [
-                               CompactIndex::Dependency.new("foo", ">1.0, <2.0", "ruby", "abc123")
+                               CompactIndex::Dependency.new("foo", ">1.0, <2.0", "ruby", "abc123"),
                              ])]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 foo:<2.0&>1.0|checksum:sum+test_gem+1.0.1\n")
     end
@@ -85,7 +85,7 @@ describe CompactIndex do
     it "dependencies have platform" do
       param = [build_version(:number => "1.0.1", :dependencies => [
                                CompactIndex::Dependency.new("a", "=1.1", "jruby", "abc123"),
-                               CompactIndex::Dependency.new("b", "=1.2", "darwin-13", "abc123")
+                               CompactIndex::Dependency.new("b", "=1.2", "darwin-13", "abc123"),
                              ])]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1-jruby,b:=1.2-darwin-13|checksum:sum+test_gem+1.0.1\n")
     end
