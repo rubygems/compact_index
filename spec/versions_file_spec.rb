@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "tempfile"
 require "spec_helper"
 require "compact_index/versions_file"

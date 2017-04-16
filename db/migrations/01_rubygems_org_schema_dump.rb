@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Sequel.migration do
   change do
     create_table(:dependencies, :ignore_index_errors => true) do
@@ -68,7 +69,7 @@ Sequel.migration do
       index [:position], :name => :index_versions_on_position
       index [:prerelease], :name => :index_versions_on_prerelease
       index [:rubygem_id], :name => :index_versions_on_rubygem_id
-      index [:rubygem_id, :number, :platform],
+      index %i[rubygem_id number platform],
         :name => :index_versions_on_rubygem_id_and_number_and_platform,
         :unique => true
     end

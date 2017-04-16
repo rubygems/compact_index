@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 def build_version(args = {})
   name = args.fetch(:name, "test_gem")
   number = args.fetch(:number, "1.0")

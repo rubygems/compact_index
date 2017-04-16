@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "bundler/gem_tasks"
 
 begin
@@ -6,7 +7,7 @@ begin
 
   desc "Run specs"
   RSpec::Core::RakeTask.new(:spec) do |t|
-    t.rspec_opts = %w(--color)
+    t.rspec_opts = %w[--color]
   end
 
   begin
@@ -16,7 +17,7 @@ begin
     task :rubocop
   end
 
-  task :default => [:rubocop, :spec]
+  task :default => %i[rubocop spec]
 rescue LoadError => e
   # rspec won't exist on production
   nil

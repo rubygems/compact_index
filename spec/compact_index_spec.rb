@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "tempfile"
 require "spec_helper"
 require "support/versions"
@@ -16,7 +17,7 @@ describe CompactIndex do
       end
     end
     context "when receive gem names" do
-      let(:gem_names) { %w(gem-1 gem_2) }
+      let(:gem_names) { %w[gem-1 gem_2] }
       it "returns the gem list" do
         expect(CompactIndex.names(gem_names)).to eq "---\ngem-1\ngem_2\n"
       end
