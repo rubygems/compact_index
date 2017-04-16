@@ -66,6 +66,11 @@ Style/SpecialGlobalVars:
 # Metrics
 
 # We've chosen to use Rubocop only for style, and not for complexity or quality checks.
+Metrics/BlockLength:
+  Exclude:
+    - "db/migrations/*.rb"
+    - "spec/**/*.rb"
+
 Metrics/ClassLength:
   Enabled: false
 
