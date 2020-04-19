@@ -7,7 +7,7 @@ gemspec
 
 group :documentation do
   gem "redcarpet", "~> 2.3"
-  gem "yard", "~> 0.8"
+  gem "yard", "~> 0.9"
 end
 
 group :development do
