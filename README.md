@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/bundler/compact_index.svg)](https://travis-ci.org/bundler/compact_index)
+[![Build Status](https://travis-ci.org/rubygems/compact_index.svg)](https://travis-ci.org/rubygems/compact_index)
 
 # CompactIndex
 
