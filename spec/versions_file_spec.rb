@@ -41,7 +41,7 @@ describe CompactIndex::VersionsFile do
     end
     let(:versions_file) { CompactIndex::VersionsFile.new(file.path) }
 
-    # rubocop:disable Style/IndentHeredoc
+    # rubocop:disable Layout/IndentHeredoc
     describe "#create" do
       it "writes one line per gem" do
         expected_file_output = <<-EOS

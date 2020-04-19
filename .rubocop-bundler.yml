@@ -23,13 +23,13 @@ Lint/UnusedMethodArgument:
 
 # Style
 
-Style/AccessModifierIndentation:
+Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
 
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
 Style/FrozenStringLiteralComment:
@@ -38,7 +38,7 @@ Style/FrozenStringLiteralComment:
 Style/MultilineBlockChain:
   Enabled: false
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
 Style/PerlBackrefs:
@@ -47,7 +47,7 @@ Style/PerlBackrefs:
 Style/SingleLineBlockParams:
   Enabled: false
 
-Style/SpaceInsideBlockBraces:
+Layout/SpaceInsideBlockBraces:
   SpaceBeforeBlockParameters: false
 
 Style/TrivialAccessors:
@@ -83,7 +83,7 @@ Style/HashSyntax:
 Style/Lambda:
   Enabled: false
 
-Style/DotPosition:
+Layout/DotPosition:
   EnforcedStyle: trailing
 
 Style/EachWithObject:
