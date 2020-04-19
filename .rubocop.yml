@@ -1,5 +1,9 @@
 inherit_from: .rubocop-bundler.yml
 
+AllCops:
+  Exclude:
+    - !ruby/regexp /(vendor|bundle|bin|db|tmp)\/.*/
+
 Metrics/BlockLength:
   Exclude:
     - "db/migrations/*.rb"
