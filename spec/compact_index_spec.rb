@@ -93,9 +93,19 @@ describe CompactIndex do
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:sum+test_gem+1.0.1,ruby:>1.8\n")
     end
 
+    it "show ruby required version with multiple requirements" do
+      param = [build_version(:number => "1.0.1", :ruby_version => "< 2.5, >=2.2")]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:sum+test_gem+1.0.1,ruby:<2.5&>=2.2\n")
+    end
+
     it "show rubygems required version" do
       param = [build_version(:number => "1.0.1", :rubygems_version => "=2.0")]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:sum+test_gem+1.0.1,rubygems:=2.0\n")
+    end
+
+    it "show rubygems required version with multiple requirements" do
+      param = [build_version(:number => "1.0.1", :rubygems_version => ">2.0, <3.1")]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:sum+test_gem+1.0.1,rubygems:<3.1&>2.0\n")
     end
 
     it "show both rubygems and ruby required versions" do
