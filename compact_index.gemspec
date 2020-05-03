@@ -8,8 +8,8 @@ require "compact_index/version"
 Gem::Specification.new do |spec|
   spec.name          = "compact_index"
   spec.version       = CompactIndex::VERSION
-  spec.authors       = ["fotanus@gmail.com"]
-  spec.email         = ["Felipe Tanus"]
+  spec.authors       = ["Felipe Tanus"]
+  spec.email         = ["fotanus@gmail.com"]
 
   spec.summary       = "Backend for compact index"
   spec.homepage      = "https://github.com/bundler/compact_index"

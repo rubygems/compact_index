@@ -1,4 +1,10 @@
-## 0.10.0 (January 22, 2016)
+## 0.12.0 (May 3, 2020)
+
+Bugfix:
+
+  - Update info line to join multiple ruby or rubygems requirements by ampersand (rubygems/compact_index#26)
+
+## 0.11.0 (January 22, 2016)
 
 Features:
 
