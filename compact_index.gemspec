@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["fotanus@gmail.com"]
 
   spec.summary       = "Backend for compact index"
-  spec.homepage      = "https://github.com/bundler/compact_index"
+  spec.homepage      = "https://github.com/rubygems/compact_index"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject {|f| f.match(%r{^(test|spec|features)/}) }
