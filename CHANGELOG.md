@@ -1,3 +1,10 @@
+## 0.13.0 (May 25, 2020)
+
+Bugfix:
+
+  - Revert trimming of space from requirements. Removing space would have meant info response of all gems were going to change.
+  - Fix token used for splitting list of requirements
+
 ## 0.12.0 (May 3, 2020)
 
 Bugfix:
