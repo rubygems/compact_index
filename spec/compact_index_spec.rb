@@ -83,9 +83,9 @@ describe CompactIndex do
     it "dependencies have platform" do
       param = [build_version(:number => "1.0.1", :dependencies => [
                                CompactIndex::Dependency.new("a", "=1.1", "jruby", "abc123"),
-                               CompactIndex::Dependency.new("b", "=1.2", "darwin-13", "abc123"),
+                               CompactIndex::Dependency.new("b", "= 1.2", "darwin-13", "abc123"),
                              ])]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1-jruby,b:=1.2-darwin-13|checksum:sum+test_gem+1.0.1\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 a:=1.1-jruby,b:= 1.2-darwin-13|checksum:sum+test_gem+1.0.1\n")
     end
 
     it "show ruby required version" do
@@ -95,7 +95,7 @@ describe CompactIndex do
 
     it "show ruby required version with multiple requirements" do
       param = [build_version(:number => "1.0.1", :ruby_version => "< 2.5, >=2.2")]
-      expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:sum+test_gem+1.0.1,ruby:<2.5&>=2.2\n")
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:sum+test_gem+1.0.1,ruby:< 2.5&>=2.2\n")
     end
 
     it "show rubygems required version" do

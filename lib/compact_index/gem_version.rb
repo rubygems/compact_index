@@ -47,7 +47,7 @@ module CompactIndex
     end
 
     def join_multiple(requirements)
-      requirements.gsub(/[[:space:]]/, "").split(",").sort.join("&")
+      requirements.split(", ").sort.join("&")
     end
   end
 end
