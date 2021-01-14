@@ -15,7 +15,7 @@ GEM
     rainbow (2.2.2)
       rake
     rake (13.0.1)
-    redcarpet (2.3.0)
+    redcarpet (3.5.1)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -46,7 +46,7 @@ PLATFORMS
 DEPENDENCIES
   compact_index!
   rake (~> 13.0)
-  redcarpet (~> 2.3)
+  redcarpet (~> 3.5)
   rspec (~> 3)
   rubocop (~> 0.49.0)
   yard (~> 0.9)
