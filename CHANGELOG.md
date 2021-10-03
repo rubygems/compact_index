@@ -1,3 +1,10 @@
+
+## 0.14.0 (May 25, 2020)
+
+Enhancement:
+
+  - Add timestamp arg to version file create function
+
 ## 0.13.0 (May 25, 2020)
 
 Bugfix:
