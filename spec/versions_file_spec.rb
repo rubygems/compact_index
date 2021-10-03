@@ -92,6 +92,17 @@ gem_b 1.0 info+test_gem+1.0
         expect(file.open.read).to include("test 1.3.0,2.2,1.1.1,1.1.1,2.1.2 info+test_gem+2.1.2")
       end
     end
+
+    context "create with ts" do
+      file          = Tempfile.new
+      versions_file = CompactIndex::VersionsFile.new(file.path)
+      ts            = Time.new(1999, 9, 9).iso8601
+
+      it "is used in created_at header" do
+        versions_file.create([], ts)
+        expect(file.open.read).to start_with("created_at: #{ts}")
+      end
+    end
   end
 
   describe "#updated_at" do

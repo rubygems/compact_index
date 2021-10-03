@@ -24,11 +24,11 @@ module CompactIndex
       created_at_header(@path) || Time.at(0).to_datetime
     end
 
-    def create(gems)
+    def create(gems, ts = Time.now.iso8601)
       gems.sort!
 
       File.open(@path, "w") do |io|
-        io.write "created_at: #{Time.now.iso8601}\n---\n"
+        io.write "created_at: #{ts}\n---\n"
         io.write gem_lines(gems)
       end
     end
