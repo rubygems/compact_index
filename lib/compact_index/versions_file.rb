@@ -39,7 +39,7 @@ module CompactIndex
       gems.reduce("".dup) do |lines, gem|
         version_numbers = gem.versions.map(&:number_and_platform).join(",")
         lines << gem.name <<
-          " ".freeze << version_numbers <<
+          " " << version_numbers <<
           " #{gem.versions.last.info_checksum}\n"
       end
     end
