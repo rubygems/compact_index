@@ -42,6 +42,9 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.28.0)
       parser (>= 3.2.1.0)
+    rubocop-performance (1.16.0)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.13.0)
     unicode-display_width (2.4.2)
     yard (0.9.34)
@@ -55,6 +58,7 @@ DEPENDENCIES
   redcarpet (~> 3.5)
   rspec (~> 3)
   rubocop (~> 1.50.2)
+  rubocop-performance
   yard (~> 0.9)
 
 BUNDLED WITH

@@ -12,4 +12,5 @@ end
 
 group :development do
   gem "rubocop", "~> 1.50.2"
+  gem "rubocop-performance", :require => false
 end
