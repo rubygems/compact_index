@@ -41,14 +41,13 @@ describe CompactIndex::VersionsFile do
     end
     let(:versions_file) { CompactIndex::VersionsFile.new(file.path) }
 
-    # rubocop:disable Layout/IndentHeredoc
     describe "#create" do
       it "writes one line per gem" do
-        expected_file_output = <<-INDEX
-created_at: #{now.iso8601}
----
-gem2 1.0.1,1.0.2-arch info+gem2+1.0.2
-gem5 1.0.1 info+gem5+1.0.1
+        expected_file_output = <<~INDEX
+          created_at: #{now.iso8601}
+          ---
+          gem2 1.0.1,1.0.2-arch info+gem2+1.0.2
+          gem5 1.0.1 info+gem5+1.0.1
         INDEX
         versions_file.create(gems)
         expect(file.open.read).to eq(expected_file_output)
@@ -67,12 +66,12 @@ gem5 1.0.1 info+gem5+1.0.1
           CompactIndex::Gem.new("gem_a", [build_version]),
         ]
         versions_file.create(gems)
-        expect(file.open.read).to eq(<<-INDEX)
-created_at: #{now.iso8601}
----
-gem_a 1.0 info+test_gem+1.0
-gem_b 1.0 info+test_gem+1.0
-      INDEX
+        expect(file.open.read).to eq(<<~INDEX)
+          created_at: #{now.iso8601}
+          ---
+          gem_a 1.0 info+test_gem+1.0
+          gem_b 1.0 info+test_gem+1.0
+        INDEX
       end
 
       it "uses the given version order" do

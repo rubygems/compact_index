@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module CompactIndex
-  # rubocop:disable Metrics/BlockLength
-  GemVersion = Struct.new(:number, :platform, :checksum, :info_checksum,
+  GemVersion = Struct.new(:number, :platform, :checksum, :info_checksum, # rubocop:disable Metrics/BlockLength
     :dependencies, :ruby_version, :rubygems_version) do
     def number_and_platform
       if platform.nil? || platform == "ruby"
@@ -41,6 +40,7 @@ module CompactIndex
 
     def deps_line
       return "" if dependencies.nil?
+
       dependencies.map do |d|
         [d[:gem], join_multiple(d.version_and_platform)].join(":")
       end.join(",")

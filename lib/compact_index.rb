@@ -6,7 +6,6 @@ require "compact_index/dependency"
 
 require "compact_index/version"
 require "compact_index/versions_file"
-require "compact_index/ext/date"
 
 module CompactIndex
   # Formats a list of gem names, to be used on the /names endpoint.
