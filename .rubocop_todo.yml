@@ -27,7 +27,7 @@ Lint/UselessAssignment:
 # Offense count: 36
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
-Metrics/LineLength:
+Layout/LineLength:
   Max: 122
 
 # Offense count: 1
