@@ -1,4 +1,5 @@
 inherit_from: .rubocop-bundler.yml
+require: rubocop-performance
 
 AllCops:
   SuggestExtensions: false
@@ -13,9 +14,8 @@ Metrics/BlockLength:
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
 
-# TODO
-# Performance/UnfreezeString:
-#   Enabled: false
+Performance/UnfreezeString:
+  Enabled: false
 
 Gemspec/DeprecatedAttributeAssignment: # new in 1.30
   Enabled: true
@@ -188,4 +188,41 @@ Lint/RequireRangeParentheses: # new in 1.32
 Lint/RequireRelativeSelfPath: # new in 1.22
   Enabled: true
 Lint/SymbolConversion: # new in 1.9
+  Enabled: true
+
+Performance/AncestorsInclude: # new in 1.7
+  Enabled: true
+Performance/BigDecimalWithNumericArgument: # new in 1.7
+  Enabled: true
+Performance/BlockGivenWithExplicitBlock: # new in 1.9
+  Enabled: true
+Performance/CollectionLiteralInLoop: # new in 1.8
+  Enabled: true
+Performance/ConcurrentMonotonicTime: # new in 1.12
+  Enabled: true
+Performance/ConstantRegexp: # new in 1.9
+  Enabled: true
+Performance/MapCompact: # new in 1.11
+  Enabled: true
+Performance/MethodObjectAsBlock: # new in 1.9
+  Enabled: true
+Performance/RedundantEqualityComparisonBlock: # new in 1.10
+  Enabled: true
+Performance/RedundantSortBlock: # new in 1.7
+  Enabled: true
+Performance/RedundantSplitRegexpArgument: # new in 1.10
+  Enabled: true
+Performance/RedundantStringChars: # new in 1.7
+  Enabled: true
+Performance/ReverseFirst: # new in 1.7
+  Enabled: true
+Performance/SortReverse: # new in 1.7
+  Enabled: true
+Performance/Squeeze: # new in 1.7
+  Enabled: true
+Performance/StringIdentifierArgument: # new in 1.13
+  Enabled: true
+Performance/StringInclude: # new in 1.7
+  Enabled: true
+Performance/Sum: # new in 1.8
   Enabled: true

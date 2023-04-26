@@ -98,9 +98,8 @@ Style/SpecialGlobalVars:
 Style/TrailingCommaInArguments:
   Enabled: false
 
-# TODO
-# Performance/FlatMap:
-#   Enabled: false
+Performance/FlatMap:
+  Enabled: false
 
 # Metrics
 

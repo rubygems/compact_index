@@ -32,10 +32,9 @@ Layout/LineLength:
 
 # Offense count: 1
 # Cop supports --auto-correct.
-# TODO
-# Performance/RedundantMatch:
-#   Exclude:
-#     - 'lib/compact_index/versions_file.rb'
+Performance/RedundantMatch:
+  Exclude:
+    - 'lib/compact_index/versions_file.rb'
 
 # Offense count: 3
 Style/Documentation:
