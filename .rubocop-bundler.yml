@@ -14,14 +14,14 @@ AllCops:
 Lint/AssignmentInCondition:
   Enabled: false
 
-Lint/EndAlignment:
-  EnforcedStyleAlignWith: variable
-  AutoCorrect: true
-
 Lint/UnusedMethodArgument:
   Enabled: false
 
 # Style
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+  AutoCorrect: true
 
 Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
@@ -65,7 +65,7 @@ Style/StringLiteralsInInterpolation:
 
 # Having these make it easier to *not* forget to add one when adding a new
 # value and you can simply copy the previous line.
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 
 Style/TrailingCommaInArrayLiteral:

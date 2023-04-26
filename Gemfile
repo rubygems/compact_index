@@ -11,5 +11,5 @@ group :documentation do
 end
 
 group :development do
-  gem "rubocop", "~> 0.49", "<= 0.50"
+  gem "rubocop", "~> 0.49", "<= 0.60"
 end
