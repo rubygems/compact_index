@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rubygems/compact_index.svg)](https://travis-ci.org/rubygems/compact_index)
+[![Ruby CI](https://github.com/rubygems/compact_index/actions/workflows/ci.yml/badge.svg)](https://github.com/rubygems/compact_index/actions/workflows/ci.yml)
 
 # CompactIndex
 
