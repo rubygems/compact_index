@@ -79,13 +79,13 @@ describe CompactIndex::VersionsFile do
         versions_file = CompactIndex::VersionsFile.new(file.path)
         gems = [
           CompactIndex::Gem.new("test",
-            [
-              build_version(:number => "1.3.0"),
-              build_version(:number => "2.2"),
-              build_version(:number => "1.1.1"),
-              build_version(:number => "1.1.1"),
-              build_version(:number => "2.1.2"),
-            ]),
+                                [
+                                  build_version(:number => "1.3.0"),
+                                  build_version(:number => "2.2"),
+                                  build_version(:number => "1.1.1"),
+                                  build_version(:number => "1.1.1"),
+                                  build_version(:number => "2.1.2"),
+                                ]),
         ]
         versions_file.create(gems)
         expect(file.open.read).to include("test 1.3.0,2.2,1.1.1,1.1.1,2.1.2 info+test_gem+2.1.2")
@@ -173,14 +173,12 @@ describe CompactIndex::VersionsFile do
 
     describe "with calculate_info_checksums flag" do
       let(:gems) do
+        dependencies = [CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123")]
         [
-          CompactIndex::Gem.new("test",
-            [
-              build_version(:number => "1.0", :platform => "ruby", :dependencies =>
-                [
-                  CompactIndex::Dependency.new("foo", "=1.0.1", "ruby", "abc123"),
-                ]),
-            ]),
+          CompactIndex::Gem.new(
+            "test",
+            [build_version(:number => "1.0", :platform => "ruby", :dependencies => dependencies)]
+          ),
         ]
       end
 

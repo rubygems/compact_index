@@ -2,7 +2,7 @@
 
 module CompactIndex
   GemVersion = Struct.new(:number, :platform, :checksum, :info_checksum, # rubocop:disable Metrics/BlockLength
-    :dependencies, :ruby_version, :rubygems_version) do
+                          :dependencies, :ruby_version, :rubygems_version) do
     def number_and_platform
       if platform.nil? || platform == "ruby"
         number.dup
@@ -28,7 +28,7 @@ module CompactIndex
       line
     end
 
-  private
+    private
 
     def ruby_version_line
       join_multiple(ruby_version)

@@ -2,7 +2,7 @@ inherit_from:
   - .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.7
   Exclude:
     - tmp/**/*
     - lib/bundler/vendor/**/*
@@ -29,7 +29,7 @@ Layout/AccessModifierIndentation:
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
 
 Style/FrozenStringLiteralComment:
@@ -98,8 +98,9 @@ Style/SpecialGlobalVars:
 Style/TrailingCommaInArguments:
   Enabled: false
 
-Performance/FlatMap:
-  Enabled: false
+# TODO
+# Performance/FlatMap:
+#   Enabled: false
 
 # Metrics
 

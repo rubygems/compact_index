@@ -12,5 +12,6 @@ Metrics/BlockLength:
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
 
-Performance/UnfreezeString:
-  Enabled: false
+# TODO
+# Performance/UnfreezeString:
+#   Enabled: false
