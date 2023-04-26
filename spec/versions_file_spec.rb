@@ -141,7 +141,7 @@ describe CompactIndex::VersionsFile do
       expect(
         versions_file.contents(extra_gems)
       ).to eq(
-        @file_contents + "gem3 1.0.1,1.0.2-arch info+gem3+1.0.2\n"
+        "#{@file_contents}gem3 1.0.1,1.0.2-arch info+gem3+1.0.2\n"
       )
     end
 
