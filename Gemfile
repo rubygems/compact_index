@@ -5,7 +5,7 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in compact_index.gemspec
 gemspec
 
-group :documentation do
+group :documentation, :optional => true do
   gem "redcarpet", "~> 3.5"
   gem "yard", "~> 0.9"
 end

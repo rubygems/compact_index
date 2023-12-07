@@ -75,7 +75,7 @@ Features:
 
 Features:
 
-  - Remove sort responsability from compact_index
+  - Remove sort responsibility from compact_index
   - Change interface for versions_file in order to receive sorted gems
 
 
@@ -123,7 +123,7 @@ Bugfixes:
 
 Bugfixes:
 
-  - Drop unecessary dependencies
+  - Drop unnecessary dependencies
   - Remove unused files imported on V0.1.0
 
 ## 0.4.0 (July 10, 2015)

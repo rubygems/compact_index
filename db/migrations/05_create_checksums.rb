@@ -7,7 +7,7 @@ Sequel.migration do
       String :name
       String :md5
 
-      index [:name], :name => :index_checksums_on_name, :unqiue => true
+      index [:name], :name => :index_checksums_on_name, :unique => true
     end
   end
 end

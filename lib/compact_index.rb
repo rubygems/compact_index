@@ -9,7 +9,7 @@ require "compact_index/versions_file"
 
 module CompactIndex
   # Formats a list of gem names, to be used on the /names endpoint.
-  # @param gem_names [Array] array with gem names to be formated, in alphabetical order
+  # @param gem_names [Array] array with gem names to be formatted, in alphabetical order
   # @return [String] names on the specified format for new index /names endpoint. Example:
   #   ```ruby
   #   ---
@@ -37,7 +37,7 @@ module CompactIndex
   #     ])
   #   ]
   #   ```
-  # @return [String] The formated output. Example:
+  # @return [String] The formatted output. Example:
   #   ```ruby
   #   created_at: 2001-01-01T01:01:01-01:01
   #   ---
@@ -63,7 +63,7 @@ module CompactIndex
   #   ]
   #   ```
   #
-  # @return [String] The formated output. Example:
+  # @return [String] The formatted output. Example:
   #   ```ruby
   #   --
   #   1.0.1 requirement:<2.0&>1.0|checksum:abc1

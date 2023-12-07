@@ -1,0 +1,30 @@
+name: ubuntu-lint
+
+on:
+  pull_request:
+
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: # added using https://github.com/step-security/secure-workflows
+  contents: read
+
+jobs:
+  ubuntu_lint:
+    name: Lint
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Setup ruby
+        uses: ruby/setup-ruby@8575951200e472d5f2d95c625da0c7bec8217c42 # v1.161.0
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+      - name: Run Lint
+        run: bundle exec rake rubocop
+    timeout-minutes: 15
