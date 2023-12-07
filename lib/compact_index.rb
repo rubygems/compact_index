@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "compact_index/gem"
-require "compact_index/gem_version"
-require "compact_index/dependency"
+require_relative "compact_index/gem"
+require_relative "compact_index/gem_version"
+require_relative "compact_index/dependency"
 
-require "compact_index/version"
-require "compact_index/versions_file"
+require_relative "compact_index/version"
+require_relative "compact_index/versions_file"
 
 module CompactIndex
   # Formats a list of gem names, to be used on the /names endpoint.
@@ -18,7 +18,7 @@ module CompactIndex
   #   other-gem
   #   ```
   def self.names(gem_names)
-    String.new("---\n") << gem_names.join("\n") << "\n"
+    gem_names.join("\n").prepend("---\n") << "\n"
   end
 
   # Returns the versions file content argumented with some extra gems
@@ -70,7 +70,7 @@ module CompactIndex
   #   1.0.2 requirement:<2.0&>1.0,requirement2:=1.1|checksum:abc2,ruby:>1.0,rubygems:>2.0
   #   ```
   def self.info(versions)
-    versions.inject("---\n".dup) do |output, version|
+    versions.inject(+"---\n") do |output, version|
       output << version.to_line << "\n"
     end
   end
