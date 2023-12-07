@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: rubygems/configure-rubygems-credentials@main
         with:
-          role-to-assume: rg_oidc_akr_e3gvf8d8qwrffk7gjno7
+          role-to-assume: rg_oidc_akr_4dfqnvsems9z1dyszgd6
       - uses: actions/checkout@v4
       - name: Set remote URL
         run: |
