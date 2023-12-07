@@ -5,7 +5,7 @@ module CompactIndex
                           :dependencies, :ruby_version, :rubygems_version) do
     def number_and_platform
       if platform.nil? || platform == "ruby"
-        number.dup
+        number
       else
         "#{number}-#{platform}"
       end
@@ -22,7 +22,7 @@ module CompactIndex
     end
 
     def to_line
-      line = number_and_platform.dup << " " << deps_line << "|checksum:#{checksum}"
+      line = "#{number_and_platform} #{deps_line}|checksum:#{checksum}"
       line << ",ruby:#{ruby_version_line}" if ruby_version && ruby_version != ">= 0"
       line << ",rubygems:#{rubygems_version_line}" if rubygems_version && rubygems_version != ">= 0"
       line
@@ -47,7 +47,9 @@ module CompactIndex
     end
 
     def join_multiple(requirements)
-      requirements.split(", ").sort.join("&")
+      requirements = requirements.split(", ")
+      requirements.sort!
+      requirements.join("&")
     end
   end
 end

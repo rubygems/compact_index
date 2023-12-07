@@ -4,7 +4,7 @@ module CompactIndex
   Dependency = Struct.new(:gem, :version, :platform, :checksum) do # rubocop:disable Lint/StructNewOverride
     def version_and_platform
       if platform.nil? || platform == "ruby"
-        version.dup
+        version
       else
         "#{version}-#{platform}"
       end
