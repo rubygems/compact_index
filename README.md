@@ -29,7 +29,7 @@ CompactIndex.names(%W(a_test b_test c_test))
 
 ### `/versions`
 
-The body of this endpoint can be rendered calling the `CompactIndex.versions` method. It receives two paremeters: a `CompactIndex::VersionsFile` object and a set of extra gems that aren't in the file yet. The gems lists should be ordered consistently by the user.
+The body of this endpoint can be rendered calling the `CompactIndex.versions` method. It receives two parameters: a `CompactIndex::VersionsFile` object and a set of extra gems that aren't in the file yet. The gems lists should be ordered consistently by the user.
 
 ```ruby
 gem 'compact_index'
