@@ -1,4 +1,4 @@
-[![Ruby CI](https://github.com/rubygems/compact_index/actions/workflows/ci.yml/badge.svg)](https://github.com/rubygems/compact_index/actions/workflows/ci.yml)
+[![Ruby CI](https://github.com/rubygems/compact_index/actions/workflows/rubygems.yml/badge.svg)](https://github.com/rubygems/compact_index/actions/workflows/rubygems.yml)
 
 # CompactIndex
 
