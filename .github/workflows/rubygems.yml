@@ -59,7 +59,7 @@ jobs:
           bundler-cache: true
         if: matrix.os.name != 'Windows'
       - name: Setup ruby (Windows)
-        uses: ruby/setup-ruby-pkgs@c7f324bc4a9434f2ce3e55fa1cc19e41daecb231 # v1.33.1
+        uses: ruby/setup-ruby-pkgs@1493c009477b19efcb54cfaf72b5f9d1fd6ba86c # v1.33.2
         with:
           ruby-version: ${{ matrix.ruby.value }}
           bundler-cache: true
