@@ -1,0 +1,242 @@
+#!/usr/bin/env ruby
+
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
+
+UPSTREAM = ENV["UPSTREAM"] || "http://rubygems-org.microplane"
+
+require "rubygems"
+require "bundler/setup"
+
+require "digest/md5"
+require "logger"
+require "net/http"
+require "pathname"
+require "time"
+require "tmpdir"
+
+FileUtils.rm_rf Pathname(__dir__).join("..", "conformance") if ENV["RECORD"]
+
+LOGGER = Logger.new($stdout)
+
+require "minitest/autorun"
+
+class TestConformance < Minitest::Test
+  # make_my_diffs_pretty!
+
+  def push_gem(name, version, &)
+    LOGGER.info("Pushing gem: #{name} #{version}")
+    spec = Gem::Specification.new do |s|
+      s.name = name
+      s.version = version
+      s.authors = ["Conformance"]
+      s.summary = "Conformance test"
+      s.files = []
+    end
+    yield spec if block_given?
+
+    Dir.mktmpdir do |dir|
+      File.open(File.join(dir, "#{spec.name}.gemspec"), "w") do |f|
+        f.write(spec.to_ruby)
+        f.write(<<~RUBY)
+          .tap do |s|
+            s.rubygems_version = "3.5.11"
+            def s.rubygems_version=(version)
+            end
+          end
+        RUBY
+      end
+      system({"SOURCE_DATE_EPOCH" => "0"}, "gem", "build", "#{spec.name}.gemspec", chdir: dir)
+      # system({"SOURCE_DATE_EPOCH" => "0"}, "gem", "spec", "#{spec.full_name}.gem", chdir: dir)
+      assert_predicate($?, :success?)
+      system("gem", "push", "--host", UPSTREAM, "#{spec.full_name}.gem", chdir: dir)
+      assert_predicate($?, :success?)
+    end
+
+    sleep 1
+    travel_to 60
+  end
+
+  def yank_gem(name, version, platform = nil)
+    LOGGER.info("Yanking gem: #{name} #{version} #{platform}")
+    cmd = ["gem", "yank", "--host", UPSTREAM, "--version", version]
+    cmd << "--platform" << platform if platform
+    cmd << name
+    system(*cmd)
+    assert_predicate($?, :success?)
+
+    sleep 1
+    travel_to 60
+  end
+
+  def step(name, &)
+    LOGGER.info("Step: #{name}")
+    yield if block_given?
+    LOGGER.info("Step: #{name} complete")
+
+    name = name.tr(" ", "_").downcase
+    @step_counter += 1
+    name.prepend("#{@step_counter.to_s.rjust(2, "0")}_")
+
+    try_match(name, "/names")
+
+    read_names(name).each do |n|
+      try_match(name, "/info/#{n}")
+    end
+
+    try_match(name, "/versions")
+
+    info_checksums = {}
+    Pathname(__dir__).join("..", "conformance", name, "%2Fversions").read.split("\n").each do |l|
+      next if l.start_with?("created_at", "---")
+      g, _, info_checksum = l.split(" ", 3)
+      info_checksums[g] = info_checksum
+    end
+
+    info_checksums.each do |g, info_checksum|
+      assert_equal(
+        info_checksum,
+        Digest::MD5.hexdigest(Pathname(__dir__).join("..", "conformance", name, "%2Finfo%2F#{g}").read),
+        "#{g} info checksum mismatch for #{name}"
+      )
+    end
+  end
+
+  def try_match(name, path, deadline: Time.now + 5)
+    uri = URI("#{UPSTREAM}#{path}")
+    LOGGER.info("GET #{uri}")
+
+    response = Net::HTTP.get_response(uri)
+
+    fixture = Pathname(__dir__).join("..", "conformance", name, URI.encode_uri_component(path))
+    header_fixture = fixture.sub_ext(".headers")
+
+    if ENV["RECORD"]
+      LOGGER.info("Recording fixtures for #{name} #{path}")
+      fixture.dirname.mkpath
+      fixture.write(response.body)
+      header_fixture.write(dump_headers(response))
+    end
+
+    assert_equal(
+      [header_fixture.read, fixture.read].join("\n\n"),
+      [dump_headers(response), response.body].join("\n\n"),
+      "#{name} #{path} mismatch"
+    )
+
+    assert_equal(fixture.read, response.body, "#{name} #{path} mismatch")
+    assert_equal(
+      header_fixture.read,
+      dump_headers(response),
+      "#{name} #{path} headers mismatch"
+    )
+  rescue
+    if Time.now < deadline
+      sleep 0.5
+      retry
+    end
+    raise
+  end
+
+  def read_names(name)
+    names = Pathname(__dir__).join("..", "conformance", name, "%2Fnames").read.split("\n").grep(/^[a-zA-Z]/)
+    names << "a" unless names.include?("a")
+    names
+  end
+
+  def dump_headers(response)
+    s = +"HTTP/1.1 #{response.code} #{response.message}\n"
+    %w[
+      accept-ranges
+      content-type
+      digest
+      etag
+      repr-digest
+    ].each do |header|
+      s << "#{response.send(:capitalize, header)}: #{response[header]}\n" if response[header]
+    end
+    s
+  end
+
+  def setup
+    @step_counter = 0
+    travel_to Time.utc(1990)
+  end
+
+  def travel_to(time)
+    case time
+    when Time
+      @time = time
+    when Integer
+      @time += time
+    else
+      raise ArgumentError, "Invalid time: #{time.inspect}"
+    end
+    LOGGER.info("Setting time to #{@time}")
+    uri = URI(UPSTREAM)
+    Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+      response = http.request_post(URI("#{UPSTREAM}/set_time"), @time.iso8601.to_s, {"Content-Type" => "text/plain"})
+      assert_equal("200", response.code, "Failed to set time: #{response}")
+    end
+  end
+
+  def rebuild_versions_list
+    uri = URI("#{UPSTREAM}/rebuild_versions_list")
+    LOGGER.info("POST #{uri}")
+    Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+      response = http.request_post(URI("#{UPSTREAM}/rebuild_versions_list"), "", {"Content-Type" => "text/plain"})
+      assert_equal("200", response.code, "Failed to rebuild versions list: #{response}")
+    end
+    sleep 1
+    travel_to 3600
+  end
+
+  def test_conformance
+    step "initial" do
+      rebuild_versions_list
+    end
+
+    step "first_push" do
+      push_gem "a", "1.0.0"
+    end
+
+    step "yank_only_gem" do
+      yank_gem "a", "1.0.0"
+    end
+
+    step "second_push" do
+      push_gem "a", "0.1.0"
+      push_gem "b", "1.0.0.pre" do |spec|
+        spec.add_runtime_dependency "a", "< 1.0.0", ">= 0.1.0"
+        spec.required_ruby_version = ">= 2.0"
+        spec.required_rubygems_version = ">= 2.0"
+      end
+    end
+
+    step "third_push" do
+      push_gem "a", "0.0.1"
+      push_gem "a", "0.2.0"
+      push_gem "a", "0.2.0" do |spec|
+        spec.platform = "x86-mingw32"
+      end
+      push_gem "a", "0.2.0" do |spec|
+        spec.platform = "java"
+      end
+    end
+
+    step "rebuild_versions_list" do
+      rebuild_versions_list
+    end
+
+    step "fourth_push" do
+      push_gem "a", "0.3.0"
+    end
+
+    step "yank_gem" do
+      yank_gem "a", "0.0.1"
+    end
+
+    step "rebuild_versions_list" do
+      rebuild_versions_list
+    end
+  end
+end

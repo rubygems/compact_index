@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
+ENV["BUNDLE_WITH"] = "conformance"
+
+require "rubygems"
+require "bundler/setup"
+
+require "compact_index"
+require "rubygems/package"
+require "sinatra"
+
+MUTEX = Mutex.new
+VERSIONS = []
+
+BASE = Tempfile.create("versions.list")
+
+at_exit do
+  BASE.close
+end
+
+def with_versions(&)
+  MUTEX.synchronize do
+    yield VERSIONS
+  end
+end
+
+after do
+  content_type "text/plain; charset=utf-8"
+
+  md5 = Digest::MD5.hexdigest(response.body.join)
+  sha256 = Digest::SHA256.base64digest(response.body.join)
+
+  etag md5
+  headers "Accept-Ranges" => "bytes",
+          "Digest" => "sha-256=#{sha256}",
+          "Repr-Digest" => "sha-256=:#{sha256}:"
+end
+
+get "/versions" do
+  with_versions do |versions|
+    versions_file = CompactIndex::VersionsFile.new(BASE.path)
+    gems = []
+    versions.each do |pkg|
+
+    end
+    versions_file.contents(gems)
+  end
+end
+
+get "/info/:name" do
+  ""
+end
+
+get "/names" do
+  content_type "text/plain"
+  CompactIndex.names(
+    with_versions { |versions| versions.map { _1.spec.name }.sort.uniq }
+  )
+end
+
+post "/api/v1/gems" do
+  content = request.body.read
+  pkg = Gem::Package.new(StringIO.new(content))
+  VERSIONS << pkg
+  status 200
+end
+
+delete "/api/v1/gems" do
+  status 200
+  body "OK"
+end
+
+# TODO: endpoint to regenerate the versions list
