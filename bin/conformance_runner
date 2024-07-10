@@ -31,6 +31,7 @@ class TestConformance < Minitest::Test
       s.authors = ["Conformance"]
       s.summary = "Conformance test"
       s.files = []
+      s.date = "2024-07-09"
     end
     yield spec if block_given?
 
@@ -147,6 +148,8 @@ class TestConformance < Minitest::Test
     s = +"HTTP/1.1 #{response.code} #{response.message}\n"
     %w[
       accept-ranges
+      content-encoding
+      content-length
       content-type
       digest
       etag
