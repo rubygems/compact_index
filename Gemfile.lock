@@ -17,7 +17,7 @@ GEM
     rake (13.0.6)
     redcarpet (3.6.0)
     regexp_parser (2.8.0)
-    rexml (3.3.3)
+    rexml (3.3.6)
       strscan
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
