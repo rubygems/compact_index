@@ -64,7 +64,28 @@ jobs:
           ruby-version: ${{ matrix.ruby.value }}
           bundler-cache: true
           mingw: clang
-        if: matrix.os.name == 'Windows'
+        if: matrix.os.name == 'Windows' && matrix.ruby.name != 'mswin'
+      - name: Setup ruby (Windows mswin)
+        uses: ruby/setup-ruby-pkgs@1493c009477b19efcb54cfaf72b5f9d1fd6ba86c # v1.33.2
+        with:
+          ruby-version: ${{ matrix.ruby.value }}
+          mingw: clang
+        if: matrix.os.name == 'Windows' && matrix.ruby.name == 'mswin'
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          repository: rubygems/rubygems
+          ref: deivid-rodriguez/no-ruby-prepend
+          path: rubygems
+        if: matrix.ruby.name == 'mswin'
+      - run: ruby setup.rb
+        working-directory: rubygems
+        if: matrix.ruby.name == 'mswin'
+      - run: rm -rf rubygems
+        shell: bash
+        if: matrix.ruby.name == 'mswin'
+      - name: Bundle install
+        run: 'D:\ruby-mswin\bin\bundle.bat install --jobs 4'
+        if: matrix.os.name == 'Windows' && matrix.ruby.name == 'mswin'
       - name: Configure bindgen
         shell: pwsh
         run: |
