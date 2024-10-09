@@ -74,6 +74,7 @@ jobs:
       - run: cat 'D:/ruby-mswin/bin/bundle'
         shell: bash
         if: matrix.ruby.name == 'mswin'
+      - run: ruby -e 'puts RbConfig::CONFIG'
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           repository: rubygems/rubygems
