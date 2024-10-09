@@ -72,7 +72,10 @@ jobs:
           mingw: clang
         if: matrix.os.name == 'Windows' && matrix.ruby.name == 'mswin'
       - name: Binstub before rubygems installation
-        run: cat 'D:/ruby-mswin/bin/bundle'
+        run: |
+          cat 'D:/ruby-mswin/bin/bundle'
+          ls -la 'D:/ruby-mswin/bin/bundle'
+          ruby -e 'puts File.executable?("D:/ruby-mswin/bin/bundle")'
         shell: bash
         if: matrix.ruby.name == 'mswin'
       - run: ruby -e 'puts RbConfig::CONFIG'
@@ -89,7 +92,10 @@ jobs:
         shell: bash
         if: matrix.ruby.name == 'mswin'
       - name: Binstub after rubygems installation
-        run: cat 'D:/ruby-mswin/bin/bundle'
+        run: |
+          cat 'D:/ruby-mswin/bin/bundle'
+          ls -la 'D:/ruby-mswin/bin/bundle'
+          ruby -e 'puts File.executable?("D:/ruby-mswin/bin/bundle")'
         shell: bash
         if: matrix.ruby.name == 'mswin'
       - name: Bundle install
