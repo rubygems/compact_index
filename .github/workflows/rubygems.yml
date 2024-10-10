@@ -76,6 +76,9 @@ jobs:
           cat 'D:/ruby-mswin/bin/bundle'
           ls -la 'D:/ruby-mswin/bin/bundle'
           ruby -e 'puts File.executable?("D:/ruby-mswin/bin/bundle")'
+          cat 'D:/ruby-mswin/bin/bundle.bat'
+          ls -la 'D:/ruby-mswin/bin/bundle.bat'
+          ruby -e 'puts File.executable?("D:/ruby-mswin/bin/bundle.bat")'
         shell: bash
         if: matrix.ruby.name == 'mswin'
       - run: ruby -e 'puts RbConfig::CONFIG'
@@ -96,6 +99,9 @@ jobs:
           cat 'D:/ruby-mswin/bin/bundle'
           ls -la 'D:/ruby-mswin/bin/bundle'
           ruby -e 'puts File.executable?("D:/ruby-mswin/bin/bundle")'
+          cat 'D:/ruby-mswin/bin/bundle.bat'
+          ls -la 'D:/ruby-mswin/bin/bundle.bat'
+          ruby -e 'puts File.executable?("D:/ruby-mswin/bin/bundle.bat")'
         shell: bash
         if: matrix.ruby.name == 'mswin'
       - name: Bundle install
