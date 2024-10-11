@@ -23,7 +23,7 @@ jobs:
       matrix:
         os:
           - { name: Ubuntu, value: ubuntu-22.04 }
-          - { name: macOS, value: macos-12 }
+          - { name: macOS, value: macos-14 }
           - { name: Windows, value: windows-2022 }
 
         ruby:
@@ -33,7 +33,7 @@ jobs:
 
         include:
           - ruby: { name: "3.2", value: 3.2.2 }
-            os: { name: macOS, value: macos-12 }
+            os: { name: macOS, value: macos-14 }
 
           - ruby: { name: jruby-9.4, value: jruby-9.4.2.0 }
             os: { name: Ubuntu, value: ubuntu-22.04 }
