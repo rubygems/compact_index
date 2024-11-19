@@ -33,9 +33,6 @@ jobs:
           - { name: "3.3", value: 3.3.6 }
 
         include:
-          - ruby: { name: "3.2", value: 3.2.2 }
-            os: { name: macOS, value: macos-14 }
-
           - ruby: { name: jruby-9.4, value: jruby-9.4.2.0 }
             os: { name: Ubuntu, value: ubuntu-22.04 }
 
