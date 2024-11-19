@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - { name: Ubuntu, value: ubuntu-22.04 }
+          - { name: Ubuntu, value: ubuntu-24.04 }
           - { name: macOS, value: macos-14 }
           - { name: Windows, value: windows-2022 }
 
@@ -30,30 +30,28 @@ jobs:
           - { name: "3.0", value: 3.0.6 }
           - { name: "3.1", value: 3.1.4 }
           - { name: "3.2", value: 3.2.2 }
+          - { name: "3.3", value: 3.3.6 }
 
         include:
-          - ruby: { name: "3.2", value: 3.2.2 }
-            os: { name: macOS, value: macos-14 }
-
-          - ruby: { name: jruby-9.4, value: jruby-9.4.2.0 }
-            os: { name: Ubuntu, value: ubuntu-22.04 }
+          - ruby: { name: jruby-9.4, value: jruby-9.4.9.0 }
+            os: { name: Ubuntu, value: ubuntu-24.04 }
 
           - ruby: { name: truffleruby-24, value: truffleruby-24.1.0 }
-            os: { name: Ubuntu, value: ubuntu-22.04 }
+            os: { name: Ubuntu, value: ubuntu-24.04 }
 
           - os: { name: Windows, value: windows-2022 }
             ruby: { name: mswin, value: mswin }
 
-          - os: { name: Ubuntu, value: ubuntu-22.04 }
+          - os: { name: Ubuntu, value: ubuntu-24.04 }
             ruby: { name: ruby-head, value: ruby-head }
 
-          - os: { name: Ubuntu, value: ubuntu-22.04 }
+          - os: { name: Ubuntu, value: ubuntu-24.04 }
             ruby: { name: truffleruby-head, value: truffleruby-head }
 
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Setup ruby (Ubuntu/macOS)
-        uses: ruby/setup-ruby@f321cf5a4d1533575411f8752cf25b86478b0442 # v1.193.0
+        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
           ruby-version: ${{ matrix.ruby.value }}
           bundler-cache: true
