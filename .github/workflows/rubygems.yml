@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - { name: Ubuntu, value: ubuntu-22.04 }
+          - { name: Ubuntu, value: ubuntu-24.04 }
           - { name: macOS, value: macos-14 }
           - { name: Windows, value: windows-2022 }
 
@@ -34,18 +34,18 @@ jobs:
 
         include:
           - ruby: { name: jruby-9.4, value: jruby-9.4.2.0 }
-            os: { name: Ubuntu, value: ubuntu-22.04 }
+            os: { name: Ubuntu, value: ubuntu-24.04 }
 
           - ruby: { name: truffleruby-24, value: truffleruby-24.1.0 }
-            os: { name: Ubuntu, value: ubuntu-22.04 }
+            os: { name: Ubuntu, value: ubuntu-24.04 }
 
           - os: { name: Windows, value: windows-2022 }
             ruby: { name: mswin, value: mswin }
 
-          - os: { name: Ubuntu, value: ubuntu-22.04 }
+          - os: { name: Ubuntu, value: ubuntu-24.04 }
             ruby: { name: ruby-head, value: ruby-head }
 
-          - os: { name: Ubuntu, value: ubuntu-22.04 }
+          - os: { name: Ubuntu, value: ubuntu-24.04 }
             ruby: { name: truffleruby-head, value: truffleruby-head }
 
     steps:
