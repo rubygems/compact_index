@@ -11,6 +11,8 @@ group :documentation, :optional => true do
 end
 
 group :development do
+  gem "rake", "~> 13.0"
+  gem "rspec", "~> 3"
   gem "rubocop", "~> 1.50.2"
   gem "rubocop-performance", :require => false
 end
