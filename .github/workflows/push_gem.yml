@@ -11,10 +11,10 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: rubygems/configure-rubygems-credentials@main
+      - uses: rubygems/configure-rubygems-credentials@bc6dd217f8a4f919d6835fcfefd470ef821f5c44 # v1.0.0
         with:
           role-to-assume: rg_oidc_akr_4dfqnvsems9z1dyszgd6
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Set remote URL
         run: |
           # Attribute commits to the last committer on HEAD
