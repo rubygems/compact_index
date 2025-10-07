@@ -37,6 +37,19 @@ describe CompactIndex do
     end
   end
 
+  describe ".info_checksums" do
+    it "delegates to VersionsFile#content" do
+      file = Tempfile.new("versions-endpoint")
+      versions_file = CompactIndex::VersionsFile.new(file.path, :only_info_checksums => true)
+      gems = [CompactIndex::Gem.new("test", [build_version])]
+      expect(
+        CompactIndex.info_checksums(versions_file, gems)
+      ).to eq(
+        versions_file.contents(gems)
+      )
+    end
+  end
+
   describe ".info" do
     it "without dependencies" do
       param = [build_version(:number => "1.0.1")]
