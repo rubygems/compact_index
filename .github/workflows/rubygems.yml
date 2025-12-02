@@ -35,8 +35,8 @@ jobs:
           - ruby: { name: jruby-9.4, value: jruby-9.4.9.0 }
             os: { name: Ubuntu, value: ubuntu-24.04 }
 
-          - ruby: { name: truffleruby-24, value: truffleruby-24.1.0 }
-            os: { name: Ubuntu, value: ubuntu-24.04 }
+          # - ruby: { name: truffleruby-24, value: truffleruby-24.1.0 }
+          #   os: { name: Ubuntu, value: ubuntu-24.04 }
 
           - os: { name: Windows, value: windows-2022 }
             ruby: { name: mswin, value: mswin }
