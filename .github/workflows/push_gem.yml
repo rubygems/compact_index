@@ -14,7 +14,7 @@ jobs:
       - uses: rubygems/configure-rubygems-credentials@bc6dd217f8a4f919d6835fcfefd470ef821f5c44 # v1.0.0
         with:
           role-to-assume: rg_oidc_akr_4dfqnvsems9z1dyszgd6
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Set remote URL
         run: |
           # Attribute commits to the last committer on HEAD
