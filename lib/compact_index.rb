@@ -21,6 +21,10 @@ module CompactIndex
     gem_names.join("\n").prepend("---\n") << "\n"
   end
 
+  def self.info_checksums(versions_file, gems = nil, calculate_info_checksums: false)
+    versions_file.contents(gems, :calculate_info_checksums => calculate_info_checksums)
+  end
+
   # Returns the versions file content argumented with some extra gems
   # @param versions_file [CompactIndex::VersionsFile] which will be used as a base response
   # @param gems [Array] an optional list of [CompactIndex::Gem] to be appended on the end
@@ -45,8 +49,8 @@ module CompactIndex
   #   rails 0.0.1,0.1.0 00fd5c36764f4ec1e8adf1c9adaada55
   #   sinatra 0.1.1,0.1.2,0.1.3 46f0a24d291725736216b4b6e7412be6
   #   ```
-  def self.versions(versions_file, gems = nil, args = {})
-    versions_file.contents(gems, args)
+  def self.versions(versions_file, gems = nil, **kwargs)
+    versions_file.contents(gems, **kwargs)
   end
 
   # Formats the versions information of a gem, to be display in the `/info/gemname` endpoint.
