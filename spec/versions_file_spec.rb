@@ -104,6 +104,82 @@ describe CompactIndex::VersionsFile do
     end
   end
 
+  context "using the file with only_info_checksums" do
+    let(:file) { Tempfile.new("create_versions.list") }
+    let(:gems) do
+      [
+        CompactIndex::Gem.new("gem5", [build_version(:name => "gem5", :number => "1.0.1")]),
+        CompactIndex::Gem.new("gem2", [
+                                build_version(:name => "gem2", :number => "1.0.1"),
+                                build_version(:name => "gem2", :number => "1.0.2", :platform => "arch"),
+                              ]),
+      ]
+    end
+    let(:versions_file) { CompactIndex::VersionsFile.new(file.path, :only_info_checksums => true) }
+
+    describe "#create" do
+      it "writes one line per gem" do
+        expected_file_output = <<~INDEX
+          created_at: #{now.iso8601}
+          ---
+          gem2 info+gem2+1.0.2
+          gem5 info+gem5+1.0.1
+        INDEX
+        versions_file.create(gems)
+        expect(file.open.read).to eq(expected_file_output)
+      end
+
+      it "adds the date on top" do
+        versions_file.create(gems)
+        expect(file.open.read).to start_with "created_at: #{now.iso8601}\n"
+      end
+
+      it "orders gems by name" do
+        file = Tempfile.new("versions-sort")
+        versions_file = CompactIndex::VersionsFile.new(file.path, :only_info_checksums => true)
+        gems = [
+          CompactIndex::Gem.new("gem_b", [build_version]),
+          CompactIndex::Gem.new("gem_a", [build_version]),
+        ]
+        versions_file.create(gems)
+        expect(file.open.read).to eq(<<~INDEX)
+          created_at: #{now.iso8601}
+          ---
+          gem_a info+test_gem+1.0
+          gem_b info+test_gem+1.0
+        INDEX
+      end
+
+      it "uses the given version order" do
+        file = Tempfile.new("versions-sort")
+        versions_file = CompactIndex::VersionsFile.new(file.path, :only_info_checksums => true)
+        gems = [
+          CompactIndex::Gem.new("test",
+                                [
+                                  build_version(:number => "1.3.0"),
+                                  build_version(:number => "2.2"),
+                                  build_version(:number => "1.1.1"),
+                                  build_version(:number => "1.1.1"),
+                                  build_version(:number => "2.1.2"),
+                                ]),
+        ]
+        versions_file.create(gems)
+        expect(file.open.read).to include("test info+test_gem+2.1.2")
+      end
+    end
+
+    context "create with ts" do
+      file          = Tempfile.new
+      versions_file = CompactIndex::VersionsFile.new(file.path)
+      ts            = Time.new(1999, 9, 9).iso8601
+
+      it "is used in created_at header" do
+        versions_file.create([], ts)
+        expect(file.open.read).to start_with("created_at: #{ts}")
+      end
+    end
+  end
+
   describe "#updated_at" do
     it "is epoch start when file does not exist" do
       expect(CompactIndex::VersionsFile.new("/tmp/doesntexist").updated_at).to eq(Time.at(0).to_datetime)
@@ -114,9 +190,10 @@ describe CompactIndex::VersionsFile do
     end
 
     it "is the created_at time when the header exists" do
-      Tempfile.new("created_at_versions") do |tmp|
+      Tempfile.create("created_at_versions") do |tmp|
         tmp.write("created_at: 2015-08-23T17:22:53-07:00\n---\ngem2 1.0.1\n")
-        file = CompactIndex::VersionsFile.new(tmp.path).updated_at
+        tmp.rewind
+        file = CompactIndex::VersionsFile.new(tmp.path)
         expect(file.updated_at).to eq(DateTime.parse("2015-08-23T17:22:53-07:00"))
       end
     end

@@ -6,14 +6,13 @@ require "digest"
 
 module CompactIndex
   class VersionsFile
-    def initialize(file = nil)
+    def initialize(file = nil, only_info_checksums: false)
       @path = file || "/versions.list"
+      @only_info_checksums = only_info_checksums
     end
 
-    def contents(gems = nil, args = {})
-      gems = calculate_info_checksums(gems) if args.delete(:calculate_info_checksums) { false }
-
-      raise ArgumentError, "Unknown options: #{args.keys.join(", ")}" unless args.empty?
+    def contents(gems = nil, calculate_info_checksums: false)
+      gems = calculate_info_checksums(gems) if calculate_info_checksums
 
       File.read(@path).tap do |out|
         out << gem_lines(gems) if gems
@@ -37,10 +36,12 @@ module CompactIndex
 
     def gem_lines(gems)
       gems.reduce(+"") do |lines, gem|
-        version_numbers = gem.versions.map(&:number_and_platform).join(",")
-        lines << gem.name <<
-          " " << version_numbers <<
-          " #{gem.versions.last.info_checksum}\n"
+        lines << gem.name
+        unless @only_info_checksums
+          version_numbers = gem.versions.map(&:number_and_platform).join(",")
+          lines << " " << version_numbers
+        end
+        lines << " #{gem.versions.last.info_checksum}\n"
       end
     end
 
