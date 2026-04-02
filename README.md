@@ -2,7 +2,9 @@
 
 # CompactIndex
 
-This gem implements the response logic for the compact index format and to manage the versions file. The compact index format has three endpoints: `/names`, `/versions` and `/info/gem_name`. The versions file is a file which hold the versions in a cache-friendly way. You can see the body response formats on [this blog post](http://andre.arko.net/2014/03/28/the-new-rubygems-index-format/) from @indirect.
+This gem is a **server-side** library that generates responses in the compact index format. It is not a client for consuming compact index endpoints. Client implementations exist separately in [RubyGems](https://github.com/rubygems/rubygems) and [Bundler](https://github.com/rubygems/rubygems/tree/master/bundler/lib/bundler/compact_index_client).
+
+The compact index format has three endpoints: `/names`, `/versions` and `/info/gem_name`. The versions file is a file which holds the versions in a cache-friendly way. You can see the body response formats on [the official Compact Index API guide](https://guides.rubygems.org/rubygems-org-compact-index-api/).
 
 ## Installation
 
