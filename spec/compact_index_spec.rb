@@ -117,5 +117,21 @@ describe CompactIndex do
       param = [build_version(:number => "1.0.1", :platform => "jruby")]
       expect(CompactIndex.info(param)).to eq("---\n1.0.1-jruby |checksum:sum+test_gem+1.0.1\n")
     end
+
+    it "show created_at timestamp" do
+      param = [build_version(:number => "1.0.1", :created_at => "2024-05-01T12:00:00Z")]
+      expect(CompactIndex.info(param)).to eq("---\n1.0.1 |checksum:sum+test_gem+1.0.1,created_at:2024-05-01T12:00:00Z\n")
+    end
+
+    it "show created_at with other requirements" do
+      param = [build_version(:number => "1.0.1", :ruby_version => ">1.9", :created_at => "2024-05-01T12:00:00Z")]
+      expected = "---\n1.0.1 |checksum:sum+test_gem+1.0.1,ruby:>1.9,created_at:2024-05-01T12:00:00Z\n"
+      expect(CompactIndex.info(param)).to eq(expected)
+    end
+
+    it "omits created_at when nil" do
+      param = [build_version(:number => "1.0.1")]
+      expect(CompactIndex.info(param)).not_to include("created_at")
+    end
   end
 end

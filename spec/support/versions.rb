@@ -9,5 +9,8 @@ def build_version(args = {})
   dependencies = args.fetch(:dependencies, nil)
   ruby_version = args.fetch(:ruby_version, nil)
   rubygems_version = args.fetch(:rubygems_version, nil)
-  CompactIndex::GemVersion.new(number, platform, checksum, info_checksum, dependencies, ruby_version, rubygems_version)
+  created_at = args.fetch(:created_at, nil)
+  CompactIndex::GemVersion.new(
+    number, platform, checksum, info_checksum, dependencies, ruby_version, rubygems_version, created_at
+  )
 end
