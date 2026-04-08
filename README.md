@@ -2,6 +2,8 @@
 
 # CompactIndex
 
+> **Note**: This library is being integrated directly into [rubygems.org](https://github.com/rubygems/rubygems.org). For bug reports, feature requests, and questions, please use the [rubygems.org issue tracker](https://github.com/rubygems/rubygems.org/issues).
+
 This gem is a **server-side** library that generates responses in the compact index format. It is not a client for consuming compact index endpoints. Client implementations exist separately in [RubyGems](https://github.com/rubygems/rubygems) and [Bundler](https://github.com/rubygems/rubygems/tree/master/bundler/lib/bundler/compact_index_client).
 
 The compact index format has three endpoints: `/names`, `/versions` and `/info/gem_name`. The versions file is a file which holds the versions in a cache-friendly way. You can see the body response formats on [the official Compact Index API guide](https://guides.rubygems.org/rubygems-org-compact-index-api/).
@@ -31,7 +33,7 @@ CompactIndex.names(%W(a_test b_test c_test))
 
 ### `/versions`
 
-The body of this endpoint can be rendered calling the `CompactIndex.versions` method. It receives two parameters: a `CompactIndex::VersionsFile` object and a set of extra gems that aren't in the file yet. The gems lists should be ordered consistently by the user.
+The body of this endpoint can be rendered calling the `CompactIndex.versions` method. It receives two parameters: a `CompactIndex::VersionsFile` object and a set of extra gems that aren't in the file yet. The gems should be ordered in the order they were added (i.e., chronological order of first publication).
 
 ```ruby
 gem 'compact_index'
@@ -59,7 +61,7 @@ CompactIndex.versions(versions_file, extra_gems)
 
 ### `/info/gem_name`
 
-Much like `/versions`, the `/info/gem_name` expects a pre-defined structure to render the text on the screen. The lists also should be ordered by the user. This is the expected format:
+Much like `/versions`, the `/info/gem_name` expects a pre-defined structure to render the text on the screen. The versions should be ordered chronologically. This is the expected format:
 
 ```ruby
 gem 'compact_index'
@@ -76,13 +78,4 @@ CompactIndex.info(versions)
 
 ### Updating the versions file
 
-The versions file creation and update are different. When created, all versions are at the side of the gem name, which appears only on one line. When updated, the file appends the new information on the end of the file, to avoid file changes.
-
-```ruby
-gem 'compact_index'
-
-versions_file = CompactIndex::VersionsFile.new(file_path)
-last_update = versions_file.updated_at
-gems = ... # Query your database, same format from `/versions` expected
-versions_file.update_with(gems)
-```
+The versions file creation and update are different. When created, all versions are at the side of the gem name, which appears only on one line. When updated, the file appends the new information on the end of the file, to avoid file changes. To append new gems, use `CompactIndex.versions(versions_file, extra_gems)` as shown in the `/versions` section above.
